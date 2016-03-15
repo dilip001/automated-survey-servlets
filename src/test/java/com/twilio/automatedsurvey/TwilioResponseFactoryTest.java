@@ -14,7 +14,7 @@ public class TwilioResponseFactoryTest {
 
     @Test
     public void shouldBuildAWelcomingMessage() throws TwiMLException {
-        Survey survey = new Survey(1, "Survey title");
+        Survey survey = new Survey(1L, "Survey title");
         String expectedWelcomeMessage = String.format("Welcome to the %s survey", survey.getTitle());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
@@ -25,7 +25,7 @@ public class TwilioResponseFactoryTest {
 
     @Test
     public void shouldBuildARedirectMessage() throws TwiMLException {
-        Survey survey = new Survey(1, "Survey title");
+        Survey survey = new Survey(1L, "Survey title");
         String expectedUrl = String.format("/question?survey=%s&question=1", survey.getId());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 

@@ -6,6 +6,7 @@ import com.twilio.sdk.verbs.TwiMLResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 public class SurveyServlet extends HttpServlet{
     private SurveyRepository surveyRepo;
@@ -21,10 +22,10 @@ public class SurveyServlet extends HttpServlet{
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Survey lastSurvey = surveyRepo.findLast();
+        Optional<Survey> lastSurvey = surveyRepo.findLast();
         TwiMLResponse twilioResponse = null;
         try {
-            twilioResponse = twilioResponseFactory.build(lastSurvey);
+            twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null));
         } catch (TwiMLException e) {
             e.printStackTrace();
         }

@@ -7,6 +7,8 @@ import org.junit.Test;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.util.Optional;
+
 import static org.mockito.Mockito.*;
 
 public class SurveyServletTest {
@@ -14,7 +16,8 @@ public class SurveyServletTest {
     @Test
     public void shouldWelcomeAndRedirectRequest() throws TwiMLException {
         SurveyRepository surveyRepo = mock(SurveyRepository.class);
-
+        when(surveyRepo.findLast()).thenReturn(Optional.empty());
+        
         TwilioResponseFactory twilioResponseFactory = mock(TwilioResponseFactory.class);
         TwiMLResponse twiMLResponse = new TwiMLResponse();
         when(twilioResponseFactory.build(any(Survey.class))).thenReturn(twiMLResponse);

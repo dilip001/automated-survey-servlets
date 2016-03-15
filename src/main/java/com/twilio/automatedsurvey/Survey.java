@@ -1,11 +1,24 @@
 package com.twilio.automatedsurvey;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Survey {
-    private int id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String title;
 
-    public Survey(int id, String title) {
+    private Survey() { /* needed by the ORM */ }
+
+    public Survey(Long id, String title) {
         this.id = id;
+        this.title = title;
+    }
+
+    public Survey(String title) {
         this.title = title;
     }
 
@@ -13,7 +26,7 @@ public class Survey {
         return title;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 }
