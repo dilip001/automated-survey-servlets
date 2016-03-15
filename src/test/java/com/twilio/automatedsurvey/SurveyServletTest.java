@@ -17,7 +17,7 @@ public class SurveyServletTest {
     public void shouldWelcomeAndRedirectRequest() throws TwiMLException {
         SurveyRepository surveyRepo = mock(SurveyRepository.class);
         when(surveyRepo.findLast()).thenReturn(Optional.empty());
-        
+
         TwilioResponseFactory twilioResponseFactory = mock(TwilioResponseFactory.class);
         TwiMLResponse twiMLResponse = new TwiMLResponse();
         when(twilioResponseFactory.build(any(Survey.class))).thenReturn(twiMLResponse);

@@ -7,7 +7,6 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
@@ -17,17 +16,15 @@ import static org.junit.Assert.assertThat;
 public class SurveyRepositoryTest {
 
     private SurveyRepository surveyRepository;
-    private EntityManager entityManager;
+    private IntegrationTestHelper integrationTestHelper;
 
     @Before
     public void setup() {
         Injector injector = Guice.createInjector(new JpaPersistModule("testJpaUnit"));
         initPersistService(injector);
         surveyRepository = injector.getInstance(SurveyRepository.class);
-        entityManager = injector.getInstance(EntityManager.class);
-        entityManager.getTransaction().begin();
-        entityManager.createQuery("delete from Survey").executeUpdate();
-        entityManager.getTransaction().commit();
+        integrationTestHelper = injector.getInstance(IntegrationTestHelper.class);
+        integrationTestHelper.cleanTable(Survey.class);
     }
 
     private void initPersistService(Injector injector) {
@@ -66,11 +63,11 @@ public class SurveyRepositoryTest {
     }
 
     private void givenThatSurveysExists(Survey... surveys) {
-        entityManager.getTransaction().begin();
-
+        integrationTestHelper.startTransaction();
         for (Survey survey : surveys) {
             surveyRepository.add(survey);
         }
-        entityManager.getTransaction().commit();
+        integrationTestHelper.finishTransaction();
     }
+
 }
