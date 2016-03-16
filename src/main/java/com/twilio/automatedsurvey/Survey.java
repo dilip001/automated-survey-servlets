@@ -1,11 +1,7 @@
 package com.twilio.automatedsurvey;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,7 +10,7 @@ public class Survey {
     @GeneratedValue
     private Long id;
     private String title;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<Question> questions;
 
     {

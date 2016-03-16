@@ -2,6 +2,7 @@ package com.twilio.automatedsurvey;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.GuiceServletContextListener;
 import com.google.inject.servlet.ServletModule;
 
@@ -9,6 +10,6 @@ public class AutomatedSurveyGuiceServletConfig extends GuiceServletContextListen
 
     @Override
     protected Injector getInjector() {
-        return Guice.createInjector(new ServletModule());
+        return Guice.createInjector(new JpaPersistModule("jpaUnit"), new AutomatedSurveyServletModule());
     }
 }

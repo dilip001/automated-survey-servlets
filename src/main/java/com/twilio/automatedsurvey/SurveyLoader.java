@@ -28,7 +28,7 @@ public class SurveyLoader {
     }
 
     private URI getResourceURI() {
-        Optional<URL> url = Optional.of(this.getClass().getResource(resourceName));
+        Optional<URL> url = Optional.ofNullable(this.getClass().getResource(resourceName));
         return url.map((URL u) -> {
             try{
                 return u.toURI();
