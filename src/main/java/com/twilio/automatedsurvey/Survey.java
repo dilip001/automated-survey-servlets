@@ -3,6 +3,10 @@ package com.twilio.automatedsurvey;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Survey {
@@ -10,6 +14,12 @@ public class Survey {
     @GeneratedValue
     private Long id;
     private String title;
+    @OneToMany
+    private Set<Question> questions;
+
+    {
+        questions = new HashSet<>();
+    }
 
     private Survey() { /* needed by the ORM */ }
 
@@ -28,5 +38,9 @@ public class Survey {
 
     public Long getId() {
         return id;
+    }
+
+    public Set<Question> getQuestions() {
+        return questions;
     }
 }

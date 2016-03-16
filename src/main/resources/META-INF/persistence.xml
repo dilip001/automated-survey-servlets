@@ -8,6 +8,7 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
         <class>com.twilio.automatedsurvey.Survey</class>
+        <class>com.twilio.automatedsurvey.Question</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url"
