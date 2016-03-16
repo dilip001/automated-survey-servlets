@@ -7,6 +7,7 @@ import org.junit.Test;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -14,7 +15,7 @@ import static org.mockito.Mockito.*;
 public class SurveyServletTest {
 
     @Test
-    public void shouldWelcomeAndRedirectRequest() throws TwiMLException {
+    public void shouldWelcomeAndRedirectRequest() throws TwiMLException, IOException {
         SurveyRepository surveyRepo = mock(SurveyRepository.class);
         when(surveyRepo.findLast()).thenReturn(Optional.empty());
 

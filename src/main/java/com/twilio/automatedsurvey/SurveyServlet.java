@@ -26,9 +26,9 @@ public class SurveyServlet extends HttpServlet{
         TwiMLResponse twilioResponse = null;
         try {
             twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null));
-        } catch (TwiMLException e) {
+            this.responseWriter.writeIn(response, twilioResponse);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        this.responseWriter.writeIn(response, twilioResponse);
     }
 }
