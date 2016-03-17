@@ -5,6 +5,7 @@ import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,19 +21,23 @@ import static org.mockito.Mockito.*;
 
 public class QuestionServletTest {
 
+    private ResponseWriter responseWriter;
+    private SurveyRepository surveyRepository;
+    private HttpServletResponse servletResponse;
+
+    @Before
+    public void setup() {
+        responseWriter = mock(ResponseWriter.class);
+        surveyRepository = mock(SurveyRepository.class);
+        servletResponse = mock(HttpServletResponse.class);
+    }
+
     @Test
     public void shouldRespondWhenSurveyHasOnlyOneQuestion() throws TwiMLException, IOException {
-        ResponseWriter responseWriter = mock(ResponseWriter.class);
-        SurveyRepository surveyRepository = mock(SurveyRepository.class);
-
         Question voiceQuestion = new Question("Is that a question?", "voice");
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(voiceQuestion)));
 
-        HttpServletResponse servletResponse = mock(HttpServletResponse.class);
-        HttpServletRequest servletRequest = getMockedRequestWithParameters(new HashMap(){{
-            put("question", "1");
-            put("survey", "1");
-        }});
+        HttpServletRequest servletRequest = createMockedValidRequest();
 
         QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
 
@@ -40,6 +45,13 @@ public class QuestionServletTest {
 
         String expectedXmlResponse = new VoiceResponse(voiceQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
+    }
+
+    private HttpServletRequest createMockedValidRequest() {
+        return getMockedRequestWithParameters(new HashMap(){{
+                put("question", "1");
+                put("survey", "1");
+            }});
     }
 
     private HttpServletRequest getMockedRequestWithParameters(Map<String, String> parameters) {
