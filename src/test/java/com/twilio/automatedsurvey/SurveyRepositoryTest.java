@@ -4,6 +4,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;
 import com.google.inject.persist.jpa.JpaPersistModule;
+import com.twilio.automatedsurvey.survey.Survey;
+import com.twilio.automatedsurvey.survey.SurveyRepository;
 import org.junit.Before;
 import org.junit.Test;
 

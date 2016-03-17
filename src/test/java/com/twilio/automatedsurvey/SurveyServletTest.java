@@ -1,5 +1,10 @@
 package com.twilio.automatedsurvey;
 
+import com.twilio.automatedsurvey.servlets.ResponseWriter;
+import com.twilio.automatedsurvey.servlets.SurveyServlet;
+import com.twilio.automatedsurvey.servlets.TwilioResponseFactory;
+import com.twilio.automatedsurvey.survey.Survey;
+import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 import org.junit.Test;

@@ -1,10 +1,10 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.survey.loader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.twilio.automatedsurvey.survey.Survey;
 
 import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Optional;
 

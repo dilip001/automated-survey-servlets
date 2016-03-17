@@ -7,7 +7,7 @@
     <display-name>Automated Survey</display-name>
 
     <listener>
-        <listener-class>com.twilio.automatedsurvey.AutomatedSurveyGuiceServletConfig</listener-class>
+        <listener-class>com.twilio.automatedsurvey.servlets.AutomatedSurveyGuiceServletConfig</listener-class>
     </listener>
 
     <filter>

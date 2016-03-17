@@ -1,5 +1,9 @@
 package com.twilio.automatedsurvey;
 
+import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.automatedsurvey.survey.Survey;
+import com.twilio.automatedsurvey.survey.loader.SurveyLoadException;
+import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
 import org.junit.Test;
 
 import java.util.Set;

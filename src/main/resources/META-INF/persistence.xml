@@ -7,8 +7,8 @@
     <persistence-unit name="jpaUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>com.twilio.automatedsurvey.Survey</class>
-        <class>com.twilio.automatedsurvey.Question</class>
+        <class>com.twilio.automatedsurvey.survey.Survey</class>
+        <class>com.twilio.automatedsurvey.survey.Question</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url"
@@ -27,8 +27,8 @@
     <persistence-unit name="testJpaUnit" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>com.twilio.automatedsurvey.Survey</class>
-        <class>com.twilio.automatedsurvey.Question</class>
+        <class>com.twilio.automatedsurvey.survey.Survey</class>
+        <class>com.twilio.automatedsurvey.survey.Question</class>
 
         <properties>
             <property name="javax.persistence.jdbc.url"

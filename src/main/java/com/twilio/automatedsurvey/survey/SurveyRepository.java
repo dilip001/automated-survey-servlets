@@ -1,4 +1,6 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.survey;
+
+import com.twilio.automatedsurvey.survey.Survey;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

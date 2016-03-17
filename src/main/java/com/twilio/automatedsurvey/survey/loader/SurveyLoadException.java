@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.survey.loader;
 
 public class SurveyLoadException extends RuntimeException {
 

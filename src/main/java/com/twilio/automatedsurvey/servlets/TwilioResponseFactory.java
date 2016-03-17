@@ -1,5 +1,6 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.servlets;
 
+import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.sdk.verbs.Redirect;
 import com.twilio.sdk.verbs.Say;
 import com.twilio.sdk.verbs.TwiMLException;

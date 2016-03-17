@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.survey;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

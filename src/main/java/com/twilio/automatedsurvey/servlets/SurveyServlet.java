@@ -1,7 +1,10 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.twilio.automatedsurvey.survey.Survey;
+import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
+import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLResponse;
 
 import javax.inject.Singleton;

@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.servlets;
 
 import com.twilio.sdk.verbs.TwiMLResponse;
 

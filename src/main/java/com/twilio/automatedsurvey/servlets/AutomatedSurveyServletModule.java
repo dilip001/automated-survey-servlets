@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.servlets;
 
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.servlet.ServletModule;
