@@ -44,4 +44,8 @@ public class Question {
     public String toString() {
         return String.format("[Body: %s, Type: %s]", this.getBody(), this.getType());
     }
+
+    public Long getId() {
+        return id;
+    }
 }

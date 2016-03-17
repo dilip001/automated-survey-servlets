@@ -28,4 +28,8 @@ public class SurveyRepository {
         entityManager.persist(survey);
         return survey;
     }
+
+    public Optional<Survey> find(Long id) {
+        return null;
+    }
 }

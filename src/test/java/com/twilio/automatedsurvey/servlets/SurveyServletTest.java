@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey;
+package com.twilio.automatedsurvey.servlets;
 
 import com.twilio.automatedsurvey.servlets.ResponseWriter;
 import com.twilio.automatedsurvey.servlets.SurveyServlet;
