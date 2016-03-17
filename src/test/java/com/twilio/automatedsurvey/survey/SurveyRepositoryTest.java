@@ -65,6 +65,24 @@ public class SurveyRepositoryTest {
         assertThat(testedSurvey.getTitle(), is(lastSurvey.getTitle()));
     }
 
+    @Test
+    public void shouldFindSurveyById() {
+        Survey survey = new Survey("one survey");
+        givenThatSurveysExists(survey);
+
+        Optional<Survey> surveyFound = surveyRepository.find(survey.getId());
+
+        assertThat(surveyFound.isPresent(), is(true));
+        assertThat(surveyFound.get(), is(survey));
+    }
+
+    @Test
+    public void shouldReturnEmptyWhenSurveyIsNotFound() {
+        Optional<Survey> survey = surveyRepository.find(1L);
+
+        assertThat(survey.isPresent(), is(false));
+    }
+
     private void givenThatSurveysExists(Survey... surveys) {
         integrationTestHelper.startTransaction();
         for (Survey survey : surveys) {

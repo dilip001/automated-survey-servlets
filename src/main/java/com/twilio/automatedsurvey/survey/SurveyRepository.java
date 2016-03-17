@@ -1,7 +1,5 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.twilio.automatedsurvey.survey.Survey;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -30,6 +28,7 @@ public class SurveyRepository {
     }
 
     public Optional<Survey> find(Long id) {
-        return null;
+        Survey survey = entityManager.find(Survey.class, id);
+        return Optional.ofNullable(survey);
     }
 }
