@@ -43,7 +43,7 @@ public class SurveyServlet extends HttpServlet{
         TwiMLResponse twilioResponse;
         try {
             twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null));
-            this.responseWriter.writeIn(response, twilioResponse);
+            this.responseWriter.writeIn(response, twilioResponse.toEscapedXML());
         } catch (Exception e) {
             e.printStackTrace();
         }

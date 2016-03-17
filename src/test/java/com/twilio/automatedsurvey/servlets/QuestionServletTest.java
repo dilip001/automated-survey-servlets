@@ -38,7 +38,8 @@ public class QuestionServletTest {
 
         questionServlet.doGet(servletRequest, servletResponse);
 
-        verify(responseWriter, times(1)).writeIn(eq(servletResponse), any(TwiMLResponse.class));
+        String expectedXmlResponse = new VoiceResponse(voiceQuestion).toEscapedXML();
+        verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 
     private HttpServletRequest getMockedRequestWithParameters(Map<String, String> parameters) {

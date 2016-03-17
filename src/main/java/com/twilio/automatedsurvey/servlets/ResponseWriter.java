@@ -1,13 +1,11 @@
 package com.twilio.automatedsurvey.servlets;
 
-import com.twilio.sdk.verbs.TwiMLResponse;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResponseWriter {
-    public void writeIn(HttpServletResponse response, TwiMLResponse lastSurvey) throws IOException {
+    public void writeIn(HttpServletResponse response, String xml) throws IOException {
         response.setContentType("application/xml");
-        response.getWriter().write(lastSurvey.toEscapedXML());
+        response.getWriter().write(xml);
     }
 }

@@ -1,8 +1,5 @@
 package com.twilio.automatedsurvey.servlets;
 
-import com.twilio.automatedsurvey.servlets.ResponseWriter;
-import com.twilio.automatedsurvey.servlets.SurveyServlet;
-import com.twilio.automatedsurvey.servlets.TwilioResponseFactory;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -35,6 +32,6 @@ public class SurveyServletTest {
 
         surveyServlet.doGet(mock(HttpServletRequest.class), response);
 
-        verify(responseWriter, times(1)).writeIn(response, twiMLResponse);
+        verify(responseWriter, times(1)).writeIn(response, twiMLResponse.toEscapedXML());
     }
 }
