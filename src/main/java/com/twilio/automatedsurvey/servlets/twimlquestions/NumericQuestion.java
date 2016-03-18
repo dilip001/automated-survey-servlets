@@ -21,7 +21,7 @@ public class NumericQuestion implements TwiMLQuestion {
 
             Gather gather = new Gather();
             gather.setAction("");
-            gather.setMethod("");
+            gather.setMethod("POST");
             gather.setFinishOnKey("#");
             response.append(gather);
 
