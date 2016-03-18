@@ -17,22 +17,21 @@ public class Question {
     private QuestionTypes type;
 
     public enum QuestionTypes {
-        voice, numeric;
-
-        public static TwiMLQuestion getTwiMLQuestion(Question question) {
-            TwiMLQuestion twiMLQuestion;
-            switch(question.getType()) {
-                case voice:
-                    twiMLQuestion = new VoiceQuestion(question);
-                    break;
-                case numeric:
-                    twiMLQuestion = new NumericQuestion(question);
-                    break;
-                default:
-                    throw new RuntimeException("Incompatible type");
+        voice {
+            @Override
+            public TwiMLQuestion getTwiMLQuestion(Question question) {
+                return new VoiceQuestion(question);
             }
-            return twiMLQuestion;
-        }
+        },
+        numeric {
+            @Override
+            public TwiMLQuestion getTwiMLQuestion(Question question) {
+                return new NumericQuestion(question);
+            }
+        };
+
+
+        public abstract TwiMLQuestion getTwiMLQuestion(Question question);
     }
 
     private Question() { /* Used by the ORM */ }
