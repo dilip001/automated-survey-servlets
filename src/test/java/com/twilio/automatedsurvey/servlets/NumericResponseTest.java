@@ -1,0 +1,35 @@
+package com.twilio.automatedsurvey.servlets;
+
+import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.sdk.verbs.TwiMLException;
+import org.junit.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+
+import static org.hamcrest.Matchers.hasXPath;
+import static org.junit.Assert.assertThat;
+
+public class NumericResponseTest {
+
+    @Test
+    public void shouldReturnResponseXMLRepresentation() throws IOException, SAXException,
+            ParserConfigurationException, TwiMLException {
+
+        NumericResponse numericResponse = new NumericResponse(new Question("Is that a question?", "numeric"));
+
+        String xml = numericResponse.toEscapedXML();
+
+        Document document = XMlTestHelper.createDocumentFromXml(xml);
+
+        Node responseNode = document.getElementsByTagName("Response").item(0);
+        assertThat(responseNode, hasXPath("/Response/Say[text() = 'For the next question select a number with " +
+                "the dial pad and then press the pound key']"));
+        assertThat(responseNode, hasXPath("/Response/Say[text() = 'Is that a question?']"));
+        assertThat(responseNode, hasXPath("/Response/Pause"));
+        assertThat(responseNode, hasXPath("/Response/Gather"));
+    }
+}

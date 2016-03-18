@@ -33,7 +33,7 @@ public class QuestionServletTest {
     }
 
     @Test
-    public void shouldRespondWhenSurveyHasOnlyOneQuestion() throws TwiMLException, IOException {
+    public void shouldRespondWhenSurveyHasVoiceQuestion() throws TwiMLException, IOException {
         Question voiceQuestion = new Question("Is that a question?", "voice");
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(voiceQuestion)));
 
@@ -44,6 +44,20 @@ public class QuestionServletTest {
         questionServlet.doGet(servletRequest, servletResponse);
 
         String expectedXmlResponse = new VoiceResponse(voiceQuestion).toEscapedXML();
+        verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
+    }
+    @Test
+    public void shouldRespondWhenSurveyHasNumericQuestion() throws TwiMLException, IOException {
+        Question numericQuestion = new Question("Is that a question?", "numeric");
+        when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(numericQuestion)));
+
+        HttpServletRequest servletRequest = createMockedValidRequest();
+
+        QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
+
+        questionServlet.doGet(servletRequest, servletResponse);
+
+        String expectedXmlResponse = new NumericResponse(numericQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 

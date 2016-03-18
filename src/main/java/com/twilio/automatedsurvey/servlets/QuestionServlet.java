@@ -19,7 +19,7 @@ public class QuestionServlet extends HttpServlet {
         this.responseWriter = responseWriter;
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse httpServletResponse) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long surveyId = Long.parseLong(request.getParameter("survey"));
         Integer questionNumber = Integer.parseInt(request.getParameter("question"));
 
@@ -27,7 +27,17 @@ public class QuestionServlet extends HttpServlet {
         Question question = survey.get().getQuestionByNumber(questionNumber)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        responseWriter.writeIn(httpServletResponse, new VoiceResponse(question).toEscapedXML());
+        String xml = null;
+        switch(question.getType()) {
+            case "voice":
+                xml = new VoiceResponse(question).toEscapedXML();
+                break;
+            case "numeric":
+                xml = new NumericResponse(question).toEscapedXML();
+                break;
+        }
+
+        responseWriter.writeIn(response, xml);
     }
 
 }
