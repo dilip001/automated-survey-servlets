@@ -16,6 +16,7 @@ public class Question {
     private String body;
     private QuestionTypes type;
 
+
     public enum QuestionTypes {
         voice {
             @Override
@@ -31,7 +32,7 @@ public class Question {
         };
 
 
-        public abstract TwiMLQuestion getTwiMLQuestion(Question question);
+        abstract TwiMLQuestion getTwiMLQuestion(Question question);
     }
 
     private Question() { /* Used by the ORM */ }
@@ -47,6 +48,10 @@ public class Question {
 
     public QuestionTypes getType() {
         return type;
+    }
+
+    public TwiMLQuestion toTwiML() {
+        return type.getTwiMLQuestion(this);
     }
 
     @Override
