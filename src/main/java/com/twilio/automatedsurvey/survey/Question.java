@@ -1,8 +1,8 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.twilio.automatedsurvey.servlets.NumericQuestion;
-import com.twilio.automatedsurvey.servlets.TwiMLQuestion;
-import com.twilio.automatedsurvey.servlets.VoiceQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.VoiceQuestion;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

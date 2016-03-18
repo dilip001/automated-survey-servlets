@@ -1,5 +1,7 @@
 package com.twilio.automatedsurvey.servlets;
 
+import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.VoiceQuestion;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;

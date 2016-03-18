@@ -1,5 +1,6 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.twimlquestions;
 
+import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.sdk.verbs.*;
 

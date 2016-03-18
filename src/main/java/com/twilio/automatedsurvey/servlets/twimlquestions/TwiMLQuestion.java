@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 public interface TwiMLQuestion {
 

@@ -1,5 +1,7 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.twimlquestions;
 
+import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.XMlTestHelper;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.sdk.verbs.TwiMLException;
 import org.junit.Test;

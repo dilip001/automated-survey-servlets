@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;

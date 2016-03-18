@@ -1,4 +1,4 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 import com.twilio.automatedsurvey.survey.Question;
 import org.junit.Test;
@@ -9,7 +9,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasXPath;
 import static org.junit.Assert.assertThat;
 
