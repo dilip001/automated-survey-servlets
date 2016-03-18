@@ -3,6 +3,7 @@ package com.twilio.automatedsurvey.survey;
 import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
 import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
 import com.twilio.automatedsurvey.servlets.twimlquestions.VoiceQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.YesNoQuestion;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +29,11 @@ public class Question {
             @Override
             public TwiMLQuestion getTwiMLQuestion(Question question) {
                 return new NumericQuestion(question);
+            }
+        }, yesno {
+            @Override
+            TwiMLQuestion getTwiMLQuestion(Question question) {
+                return new YesNoQuestion(question);
             }
         };
 
