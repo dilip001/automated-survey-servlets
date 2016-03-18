@@ -13,15 +13,15 @@ import java.io.IOException;
 import static org.hamcrest.Matchers.hasXPath;
 import static org.junit.Assert.assertThat;
 
-public class NumericResponseTest {
+public class NumericQuestionTest {
 
     @Test
     public void shouldReturnResponseXMLRepresentation() throws IOException, SAXException,
             ParserConfigurationException, TwiMLException {
 
-        NumericResponse numericResponse = new NumericResponse(new Question("Is that a question?", "numeric"));
+        NumericQuestion numericQuestion = new NumericQuestion(new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric")));
 
-        String xml = numericResponse.toEscapedXML();
+        String xml = numericQuestion.toEscapedXML();
 
         Document document = XMlTestHelper.createDocumentFromXml(xml);
 

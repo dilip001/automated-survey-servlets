@@ -4,7 +4,6 @@ import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,7 +33,7 @@ public class QuestionServletTest {
 
     @Test
     public void shouldRespondWhenSurveyHasVoiceQuestion() throws TwiMLException, IOException {
-        Question voiceQuestion = new Question("Is that a question?", "voice");
+        Question voiceQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("voice"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(voiceQuestion)));
 
         HttpServletRequest servletRequest = createMockedValidRequest();
@@ -43,12 +42,12 @@ public class QuestionServletTest {
 
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new VoiceResponse(voiceQuestion).toEscapedXML();
+        String expectedXmlResponse = new VoiceQuestion(voiceQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
     @Test
     public void shouldRespondWhenSurveyHasNumericQuestion() throws TwiMLException, IOException {
-        Question numericQuestion = new Question("Is that a question?", "numeric");
+        Question numericQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(numericQuestion)));
 
         HttpServletRequest servletRequest = createMockedValidRequest();
@@ -57,7 +56,7 @@ public class QuestionServletTest {
 
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new NumericResponse(numericQuestion).toEscapedXML();
+        String expectedXmlResponse = new NumericQuestion(numericQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 

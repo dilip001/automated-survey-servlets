@@ -1,5 +1,9 @@
 package com.twilio.automatedsurvey.survey;
 
+import com.twilio.automatedsurvey.servlets.NumericQuestion;
+import com.twilio.automatedsurvey.servlets.TwiMLQuestion;
+import com.twilio.automatedsurvey.servlets.VoiceQuestion;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,11 +14,30 @@ public class Question {
     @GeneratedValue
     private Long id;
     private String body;
-    private String type;
+    private QuestionTypes type;
+
+    public enum QuestionTypes {
+        voice, numeric;
+
+        public static TwiMLQuestion getTwiMLQuestion(Question question) {
+            TwiMLQuestion twiMLQuestion;
+            switch(question.getType()) {
+                case voice:
+                    twiMLQuestion = new VoiceQuestion(question);
+                    break;
+                case numeric:
+                    twiMLQuestion = new NumericQuestion(question);
+                    break;
+                default:
+                    throw new RuntimeException("Incompatible type");
+            }
+            return twiMLQuestion;
+        }
+    }
 
     private Question() { /* Used by the ORM */ }
 
-    public Question(String body, String type) {
+    public Question(String body, QuestionTypes type) {
         this.body = body;
         this.type = type;
     }
@@ -23,7 +46,7 @@ public class Question {
         return body;
     }
 
-    public String getType() {
+    public QuestionTypes getType() {
         return type;
     }
 

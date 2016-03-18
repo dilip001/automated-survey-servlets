@@ -27,15 +27,8 @@ public class QuestionServlet extends HttpServlet {
         Question question = survey.get().getQuestionByNumber(questionNumber)
                 .orElseThrow(() -> new RuntimeException("Question not found"));
 
-        String xml = null;
-        switch(question.getType()) {
-            case "voice":
-                xml = new VoiceResponse(question).toEscapedXML();
-                break;
-            case "numeric":
-                xml = new NumericResponse(question).toEscapedXML();
-                break;
-        }
+        TwiMLQuestion twiMLQuestion = Question.QuestionTypes.getTwiMLQuestion(question);
+        String xml = twiMLQuestion.toEscapedXML();
 
         responseWriter.writeIn(response, xml);
     }

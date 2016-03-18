@@ -13,13 +13,13 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasXPath;
 import static org.junit.Assert.assertThat;
 
-public class VoiceResponseTest {
+public class VoiceQuestionTest {
 
     @Test
     public void shouldReturnVoiceResponseTiMLRepresentation() throws ParserConfigurationException, IOException, SAXException {
-        VoiceResponse voiceResponse = new VoiceResponse(new Question("Is that a question?", "voice"));
+        VoiceQuestion voiceQuestion = new VoiceQuestion(new Question("Is that a question?", Question.QuestionTypes.valueOf("voice")));
 
-        String xml = voiceResponse.toEscapedXML();
+        String xml = voiceQuestion.toEscapedXML();
 
         Document xmlDocument = XMlTestHelper.createDocumentFromXml(xml);
 

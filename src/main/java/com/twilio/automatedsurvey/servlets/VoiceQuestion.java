@@ -3,11 +3,11 @@ package com.twilio.automatedsurvey.servlets;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.sdk.verbs.*;
 
-public class VoiceResponse {
+public class VoiceQuestion implements TwiMLQuestion {
 
     private Question internalQuestion;
 
-    public VoiceResponse(Question question) {
+    public VoiceQuestion(Question question) {
         this.internalQuestion = question;
     }
 

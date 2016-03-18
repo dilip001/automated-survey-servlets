@@ -3,10 +3,10 @@ package com.twilio.automatedsurvey.servlets;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.sdk.verbs.*;
 
-public class NumericResponse {
+public class NumericQuestion implements TwiMLQuestion {
     private Question numericQuestion;
 
-    public NumericResponse(Question numericQuestion) {
+    public NumericQuestion(Question numericQuestion) {
         this.numericQuestion = numericQuestion;
     }
 

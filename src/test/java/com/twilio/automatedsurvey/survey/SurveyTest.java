@@ -21,7 +21,7 @@ public class SurveyTest {
     @Test
     public void shouldReturnTheQuestionWhenItsTheOnlyOneInTheSurvey() {
         Survey survey = new Survey("a new survey");
-        survey.addQuestion(new Question("a question?", "voice"));
+        survey.addQuestion(new Question("a question?", Question.QuestionTypes.valueOf("voice")));
 
         Optional<Question> question = survey.getQuestionByNumber(1);
 
@@ -31,8 +31,8 @@ public class SurveyTest {
     @Test
     public void shouldReturnTheSecondQuestionWhenRequested() {
         Survey survey = new Survey("a new survey");
-        Question firstQuestion = new Question("a question?", "voice");
-        Question expectedQuestion = new Question("two questions?", "numeric");
+        Question firstQuestion = new Question("a question?", Question.QuestionTypes.valueOf("voice"));
+        Question expectedQuestion = new Question("two questions?", Question.QuestionTypes.valueOf("numeric"));
         survey.addQuestion(firstQuestion);
         survey.addQuestion(expectedQuestion);
 

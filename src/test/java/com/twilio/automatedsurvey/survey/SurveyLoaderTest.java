@@ -1,7 +1,5 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.twilio.automatedsurvey.survey.Question;
-import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.loader.SurveyLoadException;
 import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
 import org.junit.Test;
@@ -28,9 +26,9 @@ public class SurveyLoaderTest {
         Set<Question> questions = survey.getQuestions();
 
         assertThat(questions.size(), is(2));
-        assertThat(questions, hasItem(new Question("What is your full name?", "voice")));
+        assertThat(questions, hasItem(new Question("What is your full name?", Question.QuestionTypes.valueOf("voice"))));
         assertThat(questions, hasItem(new Question("In a scale of 1 to 9, how would you rate the quality of this call?",
-                "numeric")));
+                Question.QuestionTypes.valueOf("numeric"))));
     }
 
     @Test(expected = SurveyLoadException.class)
