@@ -26,7 +26,8 @@ public class QuestionServlet extends HttpServlet {
         Optional<Survey> survey = surveyRepository.find(surveyId);
 
         Question question = survey.flatMap((Survey s) -> s.getQuestionByNumber(questionNumber))
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new RuntimeException(String.format("Survey/question %s/%s not found",
+                        surveyId, questionNumber)));
 
         TwiMLQuestion twiMLQuestion = question.toTwiML();
         String xml = twiMLQuestion.toEscapedXML();
