@@ -73,5 +73,15 @@ public class SurveyTest {
         assertThat(questionsAnswerKey.get(), is("RecordingUrl"));
     }
 
+    @Test
+    public void shouldAnswerToSpecificQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.voice));
+
+        Optional<Question> question = survey.answer(1L, "The answer");
+
+        assertThat(question.get().getAnswer(), is("The answer"));
+    }
+
 
 }

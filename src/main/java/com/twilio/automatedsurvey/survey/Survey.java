@@ -1,7 +1,6 @@
 package com.twilio.automatedsurvey.survey;
 
 import javax.persistence.*;
-import javax.swing.text.html.Option;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Optional;
@@ -61,12 +60,22 @@ public class Survey {
     }
 
 
-    public void answer(long questionId, String answer) {
+    public Optional<Question> answer(long questionId, String answer) {
+        Optional<Question> question = questionById(questionId);
 
+        return question.map((Question q) -> {
+            q.setAnswer(answer);
+            return q;
+        });
     }
 
     public Optional<String> getQuestionsAnswerKey(Long questionId) {
-        Optional<Question> first = questions.stream().filter((Question question) -> question.getId().equals(questionId)).findFirst();
+        Optional<Question> first = questionById(questionId);
         return first.map((Question question) -> question.getType().getAnswerKey());
+    }
+
+    private Optional<Question> questionById(Long questionId) {
+        return questions.stream().filter((Question question) -> question.getId().equals(questionId))
+                .findFirst();
     }
 }

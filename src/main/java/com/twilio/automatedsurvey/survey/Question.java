@@ -16,11 +16,20 @@ public class Question {
     private Long id;
     private String body;
     private QuestionTypes type;
+    private String answer;
 
     Question(long id, String body, QuestionTypes type) {
         this.id = id;
         this.body = body;
         this.type = type;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
     }
 
 
