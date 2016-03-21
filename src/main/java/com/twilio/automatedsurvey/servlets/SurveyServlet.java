@@ -48,4 +48,19 @@ public class SurveyServlet extends HttpServlet{
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+        Long surveyId = Long.parseLong(request.getParameter("survey"));
+        Long questionId = Long.parseLong(request.getParameter("question"));
+
+        Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
+
+        String answerKey = survey.getQuestionsAnswerKey(questionId)
+                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
+
+        survey.answer(questionId, request.getParameter(answerKey));
+    }
+
+
 }

@@ -43,5 +43,35 @@ public class SurveyTest {
         assertThat(question.get().getType(), is(expectedQuestion.getType()));
     }
 
+    @Test
+    public void shouldReturnQuestionsAnswerKeyForNumericQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.numeric));
+
+        Optional<String> questionsAnswerKey = survey.getQuestionsAnswerKey(1L);
+
+        assertThat(questionsAnswerKey.get(), is("Digits"));
+    }
+
+    @Test
+    public void shouldReturnQuestionsAnswerKeyForYesNoQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.yesno));
+
+        Optional<String> questionsAnswerKey = survey.getQuestionsAnswerKey(1L);
+
+        assertThat(questionsAnswerKey.get(), is("Digits"));
+    }
+
+    @Test
+    public void shouldReturnQuestionsAnswerKeyForVoiceQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.voice));
+
+        Optional<String> questionsAnswerKey = survey.getQuestionsAnswerKey(1L);
+
+        assertThat(questionsAnswerKey.get(), is("RecordingUrl"));
+    }
+
 
 }

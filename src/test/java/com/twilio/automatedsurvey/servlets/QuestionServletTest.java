@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -62,20 +61,11 @@ public class QuestionServletTest {
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 
-    private HttpServletRequest createMockedValidRequest() {
-        return getMockedRequestWithParameters(new HashMap(){{
+    public static HttpServletRequest createMockedValidRequest() {
+        return MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap(){{
                 put("question", "1");
                 put("survey", "1");
             }});
-    }
-
-    private HttpServletRequest getMockedRequestWithParameters(Map<String, String> parameters) {
-        HttpServletRequest servletRequest = mock(HttpServletRequest.class);
-
-        for (String key : parameters.keySet()) {
-            when(servletRequest.getParameter(key)).thenReturn(parameters.get(key));
-        }
-        return servletRequest;
     }
 
     private Survey surveyWithQuestion(Question... questions) {

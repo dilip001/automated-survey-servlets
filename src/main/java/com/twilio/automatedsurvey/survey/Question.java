@@ -17,26 +17,41 @@ public class Question {
     private String body;
     private QuestionTypes type;
 
+    Question(long id, String body, QuestionTypes type) {
+        this.id = id;
+        this.body = body;
+        this.type = type;
+    }
+
 
     public enum QuestionTypes {
-        voice {
+        voice("RecordingUrl") {
             @Override
             public TwiMLQuestion getTwiMLQuestion(Question question) {
                 return new VoiceQuestion(question);
             }
         },
-        numeric {
+        numeric("Digits") {
             @Override
             public TwiMLQuestion getTwiMLQuestion(Question question) {
                 return new NumericQuestion(question);
             }
-        }, yesno {
+        }, yesno("Digits") {
             @Override
             TwiMLQuestion getTwiMLQuestion(Question question) {
                 return new YesNoQuestion(question);
             }
         };
 
+        private final String answerKey;
+
+        QuestionTypes(String answerKey) {
+            this.answerKey = answerKey;
+        }
+
+        public String getAnswerKey() {
+            return answerKey;
+        }
 
         abstract TwiMLQuestion getTwiMLQuestion(Question question);
     }
