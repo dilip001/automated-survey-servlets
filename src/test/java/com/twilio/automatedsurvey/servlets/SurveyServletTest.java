@@ -39,7 +39,7 @@ public class SurveyServletTest {
     }
 
     @Test
-    public void shouldAllowTheUserToAnswerAVoiceSurveyQuestion() {
+    public void shouldAllowTheUserToAnswerAVoiceSurveyQuestion() throws IOException {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
@@ -60,7 +60,7 @@ public class SurveyServletTest {
     }
 
     @Test
-    public void shouldAllowTheUserToAnswerANumericSurveyQuestion() {
+    public void shouldAllowTheUserToAnswerANumericSurveyQuestion() throws IOException {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
@@ -81,7 +81,7 @@ public class SurveyServletTest {
     }
 
     @Test
-    public void shouldAllowTheUserToAnswerAYesNoSurveyQuestion() {
+    public void shouldAllowTheUserToAnswerAYesNoSurveyQuestion() throws IOException {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));

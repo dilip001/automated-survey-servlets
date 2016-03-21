@@ -99,7 +99,8 @@ public class Question {
 
     @Override
     public String toString() {
-        return String.format("[Body: %s, Type: %s]", this.getBody(), this.getType());
+        return String.format("[Id: %s, Body: %s, Type: %s]", this.getId(),
+                this.getBody(), this.getType());
     }
 
     public Long getId() {

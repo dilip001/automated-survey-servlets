@@ -31,8 +31,8 @@ public class SurveyTest {
     @Test
     public void shouldReturnTheSecondQuestionWhenRequested() {
         Survey survey = new Survey("a new survey");
-        Question firstQuestion = new Question("a question?", Question.QuestionTypes.valueOf("voice"));
-        Question expectedQuestion = new Question("two questions?", Question.QuestionTypes.valueOf("numeric"));
+        Question firstQuestion = new Question(1L, "a question?", Question.QuestionTypes.valueOf("voice"));
+        Question expectedQuestion = new Question(2L, "two questions?", Question.QuestionTypes.valueOf("numeric"));
         survey.addQuestion(firstQuestion);
         survey.addQuestion(expectedQuestion);
 
@@ -81,6 +81,44 @@ public class SurveyTest {
         Optional<Question> question = survey.answer(1L, "The answer");
 
         assertThat(question.get().getAnswer(), is("The answer"));
+    }
+
+    @Test
+    public void shouldReturnNextQuestion()  {
+        Survey survey = new Survey("Survey");
+        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
+        Question question2 = new Question(2L, "Question 2?", Question.QuestionTypes.voice);
+
+        survey.addQuestion(question1);
+        survey.addQuestion(question2);
+
+        Optional<Question> nextQuestion = survey.getNextQuestion(question1);
+
+        assertThat(nextQuestion.get(), is(question2));
+    }
+
+    @Test
+    public void shouldReturnEmptyIfTheresNoNextQuestion() {
+        Survey survey = new Survey("Survey");
+        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
+
+        survey.addQuestion(question1);
+
+        Optional<Question> nextQuestion = survey.getNextQuestion(question1);
+
+        assertThat(nextQuestion.isPresent(), is(false));
+    }
+
+    @Test
+    public void shouldReturnFirstQuestion() {
+        Survey survey = new Survey("Survey");
+        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
+
+        survey.addQuestion(question1);
+
+        Optional<Question> nextQuestion = survey.getFirstQuestion();
+
+        assertThat(nextQuestion.get(), is(question1));
     }
 
 

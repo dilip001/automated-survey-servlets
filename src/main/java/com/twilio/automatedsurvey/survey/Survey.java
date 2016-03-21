@@ -1,10 +1,8 @@
 package com.twilio.automatedsurvey.survey;
 
 import javax.persistence.*;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
@@ -59,6 +57,11 @@ public class Survey {
         }
     }
 
+    private Stream<Question> getSortedQuestions() {
+        Comparator<Question> questionIdComparator = (elem1, elem2) -> elem1.getId().compareTo(elem2.getId());
+        return questions.stream().sorted(questionIdComparator);
+    }
+
 
     public Optional<Question> answer(long questionId, String answer) {
         Optional<Question> question = questionById(questionId);
@@ -77,5 +80,23 @@ public class Survey {
     private Optional<Question> questionById(Long questionId) {
         return questions.stream().filter((Question question) -> question.getId().equals(questionId))
                 .findFirst();
+    }
+
+    public Optional<Question> getNextQuestion(Question previousQuestion) {
+        List<Question> sortedQuestions = getSortedQuestions().collect(Collectors.toList());
+        int previousQuestionIndex = sortedQuestions.indexOf(previousQuestion);
+
+        int nextQuestionIndex = previousQuestionIndex+1;
+
+        if (nextQuestionIndex >= sortedQuestions.size()) {
+            return Optional.empty();
+        } else {
+            return Optional.of(sortedQuestions.get(previousQuestionIndex+1));
+
+        }
+    }
+
+    public Optional<Question> getFirstQuestion() {
+        return getSortedQuestions().findFirst();
     }
 }

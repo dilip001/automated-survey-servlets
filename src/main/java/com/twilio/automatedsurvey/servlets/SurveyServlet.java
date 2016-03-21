@@ -2,6 +2,7 @@ package com.twilio.automatedsurvey.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
+import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
@@ -13,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Optional;
 
 @Singleton
@@ -50,7 +52,7 @@ public class SurveyServlet extends HttpServlet{
     }
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long surveyId = Long.parseLong(request.getParameter("survey"));
         Long questionId = Long.parseLong(request.getParameter("question"));
 
@@ -59,7 +61,23 @@ public class SurveyServlet extends HttpServlet{
         String answerKey = survey.getQuestionsAnswerKey(questionId)
                 .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
 
-        survey.answer(questionId, request.getParameter(answerKey));
+        Question answeredQuestion = survey.answer(questionId, request.getParameter(answerKey))
+                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
+
+        Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
+
+        TwiMLResponse twiMLResponse = nextQuestion.map(SurveyServlet::buildRedirectTwiMLMessage)
+                .orElse(buildThankYouTwiMLResponse());
+
+        responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
+    }
+
+    private static TwiMLResponse buildThankYouTwiMLResponse() {
+        return null;
+    }
+
+    private static TwiMLResponse buildRedirectTwiMLMessage(Question q) {
+        return null;
     }
 
 
