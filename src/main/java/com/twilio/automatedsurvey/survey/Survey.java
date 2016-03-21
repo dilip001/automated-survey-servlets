@@ -1,6 +1,7 @@
 package com.twilio.automatedsurvey.survey;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -84,19 +85,28 @@ public class Survey {
 
     public Optional<Question> getNextQuestion(Question previousQuestion) {
         List<Question> sortedQuestions = getSortedQuestions().collect(Collectors.toList());
-        int previousQuestionIndex = sortedQuestions.indexOf(previousQuestion);
 
+        int previousQuestionIndex = sortedQuestions.indexOf(previousQuestion);
         int nextQuestionIndex = previousQuestionIndex+1;
 
         if (nextQuestionIndex >= sortedQuestions.size()) {
             return Optional.empty();
         } else {
-            return Optional.of(sortedQuestions.get(previousQuestionIndex+1));
-
+            return Optional.of(sortedQuestions.get(nextQuestionIndex));
         }
     }
 
     public Optional<Question> getFirstQuestion() {
         return getSortedQuestions().findFirst();
+    }
+
+    public Question answer(HttpServletRequest request) {
+        Long questionId = Long.parseLong(request.getParameter("question"));
+
+        String answerKey = getQuestionsAnswerKey(questionId)
+                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
+
+        return answer(questionId, request.getParameter(answerKey))
+                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
     }
 }

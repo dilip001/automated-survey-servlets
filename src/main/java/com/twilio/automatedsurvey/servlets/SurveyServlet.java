@@ -6,6 +6,9 @@ import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
+import com.twilio.sdk.verbs.Redirect;
+import com.twilio.sdk.verbs.Say;
+import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 
 import javax.inject.Singleton;
@@ -54,30 +57,39 @@ public class SurveyServlet extends HttpServlet{
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long surveyId = Long.parseLong(request.getParameter("survey"));
-        Long questionId = Long.parseLong(request.getParameter("question"));
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
 
-        String answerKey = survey.getQuestionsAnswerKey(questionId)
-                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
-
-        Question answeredQuestion = survey.answer(questionId, request.getParameter(answerKey))
-                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
+        Question answeredQuestion = survey.answer(request);
 
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
 
-        TwiMLResponse twiMLResponse = nextQuestion.map(SurveyServlet::buildRedirectTwiMLMessage)
-                .orElse(buildThankYouTwiMLResponse());
+        TwiMLResponse twiMLResponse = nextQuestion.map((Question q) -> buildRedirectTwiMLMessage(surveyId, q))
+                .orElse(buildThankYouTwiMLResponse(survey.getTitle()));
 
         responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
     }
 
-    private static TwiMLResponse buildThankYouTwiMLResponse() {
-        return null;
+    private TwiMLResponse buildThankYouTwiMLResponse(String surveyTitle) {
+        try {
+            TwiMLResponse response = new TwiMLResponse();
+            response.append(new Say(String.format("Thank you for taking the %s survey. Good bye.", surveyTitle)));
+            return response;
+        } catch (TwiMLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private static TwiMLResponse buildRedirectTwiMLMessage(Question q) {
-        return null;
+    private TwiMLResponse buildRedirectTwiMLMessage(Long surveyId, Question q) {
+        try {
+            TwiMLResponse response = new TwiMLResponse();
+            Redirect redirect = new Redirect(String.format("/question?survey=%s&question=%s", surveyId, q.getId()));
+            redirect.setMethod("GET");
+            response.append(redirect);
+            return response;
+        } catch (TwiMLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

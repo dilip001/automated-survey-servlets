@@ -43,7 +43,7 @@ public class SurveyServletTest {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
-        when(mockedSurvey.getQuestionsAnswerKey(1L)).thenReturn(Optional.of("RecordingUrl"));
+        when(mockedSurvey.getNextQuestion(any(Question.class))).thenReturn(Optional.of(mock(Question.class)));
 
         SurveyServlet surveyServlet = new SurveyServlet(surveyRepository, mock(TwilioResponseFactory.class),
                 mock(ResponseWriter.class));
@@ -56,7 +56,7 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(1L, "the answer");
+        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
     }
 
     @Test
@@ -64,7 +64,7 @@ public class SurveyServletTest {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
-        when(mockedSurvey.getQuestionsAnswerKey(anyLong())).thenReturn(Optional.of("Digits"));
+        when(mockedSurvey.getNextQuestion(any(Question.class))).thenReturn(Optional.of(mock(Question.class)));
 
         SurveyServlet surveyServlet = new SurveyServlet(surveyRepository, mock(TwilioResponseFactory.class),
                 mock(ResponseWriter.class));
@@ -77,7 +77,7 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(1L, "1");
+        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
     }
 
     @Test
@@ -85,7 +85,7 @@ public class SurveyServletTest {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
-        when(mockedSurvey.getQuestionsAnswerKey(anyLong())).thenReturn(Optional.of("Digits"));
+        when(mockedSurvey.getNextQuestion(any(Question.class))).thenReturn(Optional.of(mock(Question.class)));
 
         SurveyServlet surveyServlet = new SurveyServlet(surveyRepository, mock(TwilioResponseFactory.class),
                 mock(ResponseWriter.class));
@@ -98,6 +98,6 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(1L, "1");
+        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
     }
 }
