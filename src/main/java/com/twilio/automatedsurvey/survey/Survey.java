@@ -65,26 +65,13 @@ public class Survey {
 
     public Question answer(HttpServletRequest request) {
         Long questionId = Long.parseLong(request.getParameter("question"));
-
-        String answerKey = getQuestionsAnswerKey(questionId)
-                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
-
-        return answer(questionId, request.getParameter(answerKey))
-                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
-    }
-
-    private Optional<Question> answer(long questionId, String answer) {
         Optional<Question> question = questionById(questionId);
 
         return question.map((Question q) -> {
-            q.setAnswer(answer);
+            String answerKey = q.getType().getAnswerKey();
+            q.setAnswer(request.getParameter(answerKey));
             return q;
-        });
-    }
-
-    private Optional<String> getQuestionsAnswerKey(Long questionId) {
-        Optional<Question> first = questionById(questionId);
-        return first.map((Question question) -> question.getType().getAnswerKey());
+        }).orElseThrow(() -> new RuntimeException(String.format("Question %s from Survey %s not found", id, questionId)));
     }
 
     private Optional<Question> questionById(Long questionId) {
