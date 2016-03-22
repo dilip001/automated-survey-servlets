@@ -39,7 +39,7 @@ public class SurveyServletTest {
     }
 
     @Test
-    public void shouldAllowTheUserToAnswerAVoiceSurveyQuestion() throws IOException {
+    public void shouldAllowTheUserToAnswerAQuestion() throws IOException {
         SurveyRepository surveyRepository = mock(SurveyRepository.class);
         Survey mockedSurvey = mock(Survey.class);
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
@@ -56,48 +56,6 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
-    }
-
-    @Test
-    public void shouldAllowTheUserToAnswerANumericSurveyQuestion() throws IOException {
-        SurveyRepository surveyRepository = mock(SurveyRepository.class);
-        Survey mockedSurvey = mock(Survey.class);
-        when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
-        when(mockedSurvey.getNextQuestion(any(Question.class))).thenReturn(Optional.of(mock(Question.class)));
-
-        SurveyServlet surveyServlet = new SurveyServlet(surveyRepository, mock(TwilioResponseFactory.class),
-                mock(ResponseWriter.class));
-
-        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
-            put("survey", "1");
-            put("question", "1");
-            put("Digits", "1");
-        }});
-
-        surveyServlet.doPost(request, mock(HttpServletResponse.class));
-
-        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
-    }
-
-    @Test
-    public void shouldAllowTheUserToAnswerAYesNoSurveyQuestion() throws IOException {
-        SurveyRepository surveyRepository = mock(SurveyRepository.class);
-        Survey mockedSurvey = mock(Survey.class);
-        when(surveyRepository.find(anyLong())).thenReturn(Optional.of(mockedSurvey));
-        when(mockedSurvey.getNextQuestion(any(Question.class))).thenReturn(Optional.of(mock(Question.class)));
-
-        SurveyServlet surveyServlet = new SurveyServlet(surveyRepository, mock(TwilioResponseFactory.class),
-                mock(ResponseWriter.class));
-
-        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
-            put("survey", "1");
-            put("question", "1");
-            put("Digits", "1");
-        }});
-
-        surveyServlet.doPost(request, mock(HttpServletResponse.class));
-
-        verify(mockedSurvey, times(1)).answer(any(HttpServletRequest.class));
+        verify(mockedSurvey, times(1)).answer(request);
     }
 }

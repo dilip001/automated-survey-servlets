@@ -63,8 +63,17 @@ public class Survey {
         return questions.stream().sorted(questionIdComparator);
     }
 
+    public Question answer(HttpServletRequest request) {
+        Long questionId = Long.parseLong(request.getParameter("question"));
 
-    public Optional<Question> answer(long questionId, String answer) {
+        String answerKey = getQuestionsAnswerKey(questionId)
+                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
+
+        return answer(questionId, request.getParameter(answerKey))
+                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
+    }
+
+    private Optional<Question> answer(long questionId, String answer) {
         Optional<Question> question = questionById(questionId);
 
         return question.map((Question q) -> {
@@ -100,13 +109,4 @@ public class Survey {
         return getSortedQuestions().findFirst();
     }
 
-    public Question answer(HttpServletRequest request) {
-        Long questionId = Long.parseLong(request.getParameter("question"));
-
-        String answerKey = getQuestionsAnswerKey(questionId)
-                .orElseThrow(() -> new RuntimeException("Impossible to find answer key"));
-
-        return answer(questionId, request.getParameter(answerKey))
-                .orElseThrow(() -> new RuntimeException("Impossible to answer question"));
-    }
 }

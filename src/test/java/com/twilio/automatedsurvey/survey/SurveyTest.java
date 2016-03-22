@@ -1,7 +1,10 @@
 package com.twilio.automatedsurvey.survey;
 
+import com.twilio.automatedsurvey.servlets.MockedHttpServletRequestFactory;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -74,13 +77,48 @@ public class SurveyTest {
     }
 
     @Test
-    public void shouldAnswerToSpecificQuestion() {
+    public void shouldAnswerToNumericQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.numeric));
+
+        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
+            put("question", "1");
+            put("Digits", "1");
+        }});
+
+        Question question = survey.answer(request);
+
+        assertThat(question.getAnswer(), is("1"));
+    }
+
+    @Test
+    public void shouldAnswerToYesNoQuestion() {
+        Survey survey = new Survey("Survey");
+        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.yesno));
+
+        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
+            put("question", "1");
+            put("Digits", "1");
+        }});
+
+        Question question = survey.answer(request);
+
+        assertThat(question.getAnswer(), is("1"));
+    }
+
+    @Test
+    public void shouldAnswerToVoiceQuestion() {
         Survey survey = new Survey("Survey");
         survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.voice));
 
-        Optional<Question> question = survey.answer(1L, "The answer");
+        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
+            put("question", "1");
+            put("RecordingUrl", "answer");
+        }});
 
-        assertThat(question.get().getAnswer(), is("The answer"));
+        Question question = survey.answer(request);
+
+        assertThat(question.getAnswer(), is("answer"));
     }
 
     @Test
