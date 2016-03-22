@@ -27,7 +27,7 @@ public class TwilioResponseFactoryTest {
     @Test
     public void shouldBuildARedirectMessage() throws TwiMLException {
         Survey survey = new Survey(1L, "Survey title");
-        String expectedUrl = String.format("/question?survey=%s&question=1", survey.getId());
+        String expectedUrl = String.format("/question?survey=%s", survey.getId());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
         TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey);

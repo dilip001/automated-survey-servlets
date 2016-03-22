@@ -18,7 +18,7 @@ public class Question {
     private QuestionTypes type;
     private String answer;
 
-    Question(long id, String body, QuestionTypes type) {
+    public Question(long id, String body, QuestionTypes type) {
         this.id = id;
         this.body = body;
         this.type = type;

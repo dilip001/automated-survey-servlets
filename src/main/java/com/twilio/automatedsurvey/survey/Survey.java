@@ -46,18 +46,6 @@ public class Survey {
         questions.add(question);
     }
 
-    public Optional<Question> getQuestionByNumber(Integer questionNumber) {
-        int questionIndex = questionNumber - 1;
-
-        if (questionIndex >= questions.size()){
-            return Optional.empty();
-        } else {
-            Comparator<Question> questionIdComparator = (elem1, elem2) -> elem1.getBody().compareTo(elem2.getBody());
-            Stream<Question> sortedQuestionsList = questions.stream().sorted(questionIdComparator);
-            return Optional.of((Question) sortedQuestionsList.toArray()[questionIndex]);
-        }
-    }
-
     private Stream<Question> getSortedQuestions() {
         Comparator<Question> questionIdComparator = (elem1, elem2) -> elem1.getId().compareTo(elem2.getId());
         return questions.stream().sorted(questionIdComparator);
@@ -74,7 +62,7 @@ public class Survey {
         }).orElseThrow(() -> new RuntimeException(String.format("Question %s from Survey %s not found", id, questionId)));
     }
 
-    private Optional<Question> questionById(Long questionId) {
+    public Optional<Question> questionById(Long questionId) {
         return questions.stream().filter((Question question) -> question.getId().equals(questionId))
                 .findFirst();
     }
@@ -95,5 +83,6 @@ public class Survey {
     public Optional<Question> getFirstQuestion() {
         return getSortedQuestions().findFirst();
     }
+
 
 }

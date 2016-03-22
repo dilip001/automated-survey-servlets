@@ -11,7 +11,7 @@ public class TwilioResponseFactory {
         String welcomeMessage = String.format("Welcome to the %s survey", survey.getTitle());
         Say sayWelcome = new Say(welcomeMessage);
 
-        String url = String.format("/question?survey=%s&question=1", survey.getId());
+        String url = String.format("/question?survey=%s", survey.getId());
         Redirect redirectQuestion = new Redirect(url);
 
         TwiMLResponse twiMLResponse = new TwiMLResponse();

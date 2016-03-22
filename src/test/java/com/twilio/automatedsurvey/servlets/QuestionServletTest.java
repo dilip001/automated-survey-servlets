@@ -33,11 +33,14 @@ public class QuestionServletTest {
     }
 
     @Test
-    public void shouldRespondWhenSurveyHasVoiceQuestion() throws TwiMLException, IOException {
-        Question voiceQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("voice"));
+    public void shouldRespondWithSpecifiedQuestion() throws TwiMLException, IOException {
+        Question voiceQuestion = new Question(1L, "Is that a question?", Question.QuestionTypes.valueOf("voice"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(voiceQuestion)));
 
-        HttpServletRequest servletRequest = createMockedValidRequest();
+        HttpServletRequest servletRequest = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap() {{
+            put("question", "1");
+            put("survey", "1");
+        }});
 
         QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
 
@@ -48,11 +51,13 @@ public class QuestionServletTest {
     }
 
     @Test
-    public void shouldRespondWhenSurveyHasNumericQuestion() throws TwiMLException, IOException {
+    public void shouldRespondWithFirstQuestionWhenNoQuestionIdIsProvided() throws TwiMLException, IOException {
         Question numericQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(numericQuestion)));
 
-        HttpServletRequest servletRequest = createMockedValidRequest();
+        HttpServletRequest servletRequest = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap() {{
+            put("survey", "1");
+        }});
 
         QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
 
@@ -60,13 +65,6 @@ public class QuestionServletTest {
 
         String expectedXmlResponse = new NumericQuestion(numericQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
-    }
-
-    public static HttpServletRequest createMockedValidRequest() {
-        return MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap(){{
-                put("question", "1");
-                put("survey", "1");
-            }});
     }
 
     private Survey surveyWithQuestion(Question... questions) {
