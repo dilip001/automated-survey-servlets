@@ -82,7 +82,7 @@ public class Survey {
         });
     }
 
-    public Optional<String> getQuestionsAnswerKey(Long questionId) {
+    private Optional<String> getQuestionsAnswerKey(Long questionId) {
         Optional<Question> first = questionById(questionId);
         return first.map((Question question) -> question.getType().getAnswerKey());
     }

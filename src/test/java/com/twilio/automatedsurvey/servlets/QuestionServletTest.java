@@ -46,6 +46,7 @@ public class QuestionServletTest {
         String expectedXmlResponse = new VoiceQuestion(voiceQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
+
     @Test
     public void shouldRespondWhenSurveyHasNumericQuestion() throws TwiMLException, IOException {
         Question numericQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric"));
