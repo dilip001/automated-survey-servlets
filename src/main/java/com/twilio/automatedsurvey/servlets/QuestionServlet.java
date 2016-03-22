@@ -39,7 +39,7 @@ public class QuestionServlet extends HttpServlet {
             question = survey.flatMap((Survey s) -> s.questionById(parsedQuestionId));
         }
 
-        TwiMLQuestion twiMLQuestion = question.map((Question q) -> q.toTwiML())
+        TwiMLQuestion twiMLQuestion = question.map((Question q) -> q.toTwiML(surveyId))
                 .orElseThrow(()  -> new RuntimeException(String.format("Survey/question %s/%s not found",
                         surveyId, questionId)));
 

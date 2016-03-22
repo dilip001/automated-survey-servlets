@@ -55,13 +55,16 @@ public class SurveyServlet extends HttpServlet{
     }
 
     @Override
+    @Transactional
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Long surveyId = Long.parseLong(request.getParameter("survey"));
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
-
+        survey.setTitle("teste");
+        surveyRepo.update(survey);
+        survey.setTitle("outro teste");
         Question answeredQuestion = survey.answer(request);
-
+        surveyRepo.update(survey);
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
 
         TwiMLResponse twiMLResponse = nextQuestion.map((Question q) -> buildRedirectTwiMLMessage(surveyId, q))
@@ -83,7 +86,7 @@ public class SurveyServlet extends HttpServlet{
     private TwiMLResponse buildRedirectTwiMLMessage(Long surveyId, Question q) {
         try {
             TwiMLResponse response = new TwiMLResponse();
-            Redirect redirect = new Redirect(String.format("/question?survey=%s&question=%s", surveyId, q.getId()));
+            Redirect redirect = new Redirect(String.format("question?survey=%s&question=%s", surveyId, q.getId()));
             redirect.setMethod("GET");
             response.append(redirect);
             return response;

@@ -4,9 +4,11 @@ import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.sdk.verbs.*;
 
 public class YesNoQuestion implements TwiMLQuestion {
+    private Long surveyId;
     private Question question;
 
-    public YesNoQuestion(Question question) {
+    public YesNoQuestion(Long surveyId, Question question) {
+        this.surveyId = surveyId;
         this.question = question;
     }
 
@@ -19,7 +21,7 @@ public class YesNoQuestion implements TwiMLQuestion {
             response.append(new Pause());
 
             Gather gather = new Gather();
-            gather.setAction("/save_response?qid=" + question.getId());
+            gather.setAction(String.format("survey?survey=%s&amp;question=%s", surveyId, question.getId()));
             gather.setMethod("POST");
             gather.setFinishOnKey("#");
 

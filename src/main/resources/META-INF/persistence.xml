@@ -12,7 +12,7 @@
 
         <properties>
             <property name="javax.persistence.jdbc.url"
-                      value="jdbc:postgresql://localhost:5432/automated-survey-servlets-test" />
+                      value="jdbc:postgresql://localhost:5432/automated-survey-servlets" />
             <property name="javax.persistence.jdbc.user"
                       value="postgres" />
             <property name="javax.persistence.jdbc.password"
@@ -20,6 +20,8 @@
             <property name="eclipselink.target-database" value="PostgreSQL"/>
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.format_sql" value="true" />
+            <property name="hibernate.show_sql" value="true" />
             <property name="eclipselink.logging.level" value="ALL"/>
         </properties>
     </persistence-unit>

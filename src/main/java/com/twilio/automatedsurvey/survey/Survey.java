@@ -1,5 +1,7 @@
 package com.twilio.automatedsurvey.survey;
 
+import com.google.inject.persist.Transactional;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
@@ -12,7 +14,8 @@ public class Survey {
     @GeneratedValue
     private Long id;
     private String title;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name="survey_id")
     private Set<Question> questions;
 
     {
@@ -51,6 +54,7 @@ public class Survey {
         return questions.stream().sorted(questionIdComparator);
     }
 
+    @Transactional
     public Question answer(HttpServletRequest request) {
         Long questionId = Long.parseLong(request.getParameter("question"));
         Optional<Question> question = questionById(questionId);
@@ -85,4 +89,7 @@ public class Survey {
     }
 
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

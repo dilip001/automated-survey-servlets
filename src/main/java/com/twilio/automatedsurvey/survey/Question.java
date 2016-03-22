@@ -36,19 +36,19 @@ public class Question {
     public enum QuestionTypes {
         voice("RecordingUrl") {
             @Override
-            public TwiMLQuestion getTwiMLQuestion(Question question) {
-                return new VoiceQuestion(question);
+            public TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
+                return new VoiceQuestion(surveyId, question);
             }
         },
         numeric("Digits") {
             @Override
-            public TwiMLQuestion getTwiMLQuestion(Question question) {
-                return new NumericQuestion(question);
+            public TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
+                return new NumericQuestion(surveyId, question);
             }
         }, yesno("Digits") {
             @Override
-            TwiMLQuestion getTwiMLQuestion(Question question) {
-                return new YesNoQuestion(question);
+            TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
+                return new YesNoQuestion(surveyId, question);
             }
         };
 
@@ -62,7 +62,7 @@ public class Question {
             return answerKey;
         }
 
-        abstract TwiMLQuestion getTwiMLQuestion(Question question);
+        abstract TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question);
     }
 
     private Question() { /* Used by the ORM */ }
@@ -80,8 +80,8 @@ public class Question {
         return type;
     }
 
-    public TwiMLQuestion toTwiML() {
-        return type.getTwiMLQuestion(this);
+    public TwiMLQuestion toTwiML(Long surveyId) {
+        return type.getTwiMLQuestion(surveyId, this);
     }
 
     @Override

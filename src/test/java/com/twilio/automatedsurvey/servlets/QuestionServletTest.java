@@ -46,7 +46,7 @@ public class QuestionServletTest {
 
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new VoiceQuestion(voiceQuestion).toEscapedXML();
+        String expectedXmlResponse = new VoiceQuestion(1L, voiceQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 
@@ -63,7 +63,7 @@ public class QuestionServletTest {
 
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new NumericQuestion(numericQuestion).toEscapedXML();
+        String expectedXmlResponse = new NumericQuestion(1L, numericQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 

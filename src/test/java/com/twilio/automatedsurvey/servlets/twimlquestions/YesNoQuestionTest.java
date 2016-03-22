@@ -16,7 +16,7 @@ public class YesNoQuestionTest {
 
     @Test
     public void shouldReturnYesNoQuestionTwiMLRepresentation() throws IOException, SAXException, ParserConfigurationException {
-        YesNoQuestion question = new YesNoQuestion(new Question("Is that a question?", Question.QuestionTypes.yesno));
+        YesNoQuestion question = new YesNoQuestion(1L, new Question("Is that a question?", Question.QuestionTypes.yesno));
 
         String xml = question.toEscapedXML();
         Document document = XMlTestHelper.createDocumentFromXml(xml);

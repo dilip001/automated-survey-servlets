@@ -16,7 +16,7 @@ public class VoiceQuestionTest {
 
     @Test
     public void shouldReturnVoiceResponseTiMLRepresentation() throws ParserConfigurationException, IOException, SAXException {
-        VoiceQuestion voiceQuestion = new VoiceQuestion(new Question("Is that a question?", Question.QuestionTypes.valueOf("voice")));
+        VoiceQuestion voiceQuestion = new VoiceQuestion(1L, new Question("Is that a question?", Question.QuestionTypes.valueOf("voice")));
 
         String xml = voiceQuestion.toEscapedXML();
 
