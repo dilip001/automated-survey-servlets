@@ -60,11 +60,10 @@ public class SurveyServlet extends HttpServlet{
         Long surveyId = Long.parseLong(request.getParameter("survey"));
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
-        survey.setTitle("teste");
-        surveyRepo.update(survey);
-        survey.setTitle("outro teste");
+
         Question answeredQuestion = survey.answer(request);
         surveyRepo.update(survey);
+
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
 
         TwiMLResponse twiMLResponse = nextQuestion.map((Question q) -> buildRedirectTwiMLMessage(surveyId, q))

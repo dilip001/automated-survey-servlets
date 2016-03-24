@@ -1,7 +1,5 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.google.inject.persist.Transactional;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -35,6 +33,7 @@ public class SurveyRepository {
     }
 
     public void update(Survey survey) {
-        entityManager.merge(survey);
+        entityManager.getTransaction().begin();
+        entityManager.getTransaction().commit();
     }
 }
