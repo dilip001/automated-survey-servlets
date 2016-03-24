@@ -15,7 +15,13 @@ public class Question {
     private QuestionTypes type;
     private String answer;
 
-    public Question(long id, String body, QuestionTypes type) {
+    private Question() { /* Used by the ORM */ }
+
+    public Question(String body, QuestionTypes type) {
+        this(null, body, type);
+    }
+
+    public Question(Long id, String body, QuestionTypes type) {
         this.id = id;
         this.body = body;
         this.type = type;
@@ -29,19 +35,12 @@ public class Question {
         return answer;
     }
 
-    public String getFormatedAnswer(){
-        return type.format(answer);
-    }
-
     public void setAnswer(String answer) {
         this.answer = answer;
     }
 
-    private Question() { /* Used by the ORM */ }
-
-    public Question(String body, QuestionTypes type) {
-        this.body = body;
-        this.type = type;
+    public String getFormatedAnswer(){
+        return type.format(answer);
     }
 
     public String getBody() {
