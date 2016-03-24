@@ -87,9 +87,4 @@ public class Survey {
     public Optional<Question> getFirstQuestion() {
         return getSortedQuestions().findFirst();
     }
-
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }
