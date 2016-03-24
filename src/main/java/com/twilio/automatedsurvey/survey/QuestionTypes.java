@@ -17,6 +17,7 @@ public enum QuestionTypes {
             return answer;
         }
     },
+
     numeric("Digits") {
         @Override
         public TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
@@ -27,7 +28,9 @@ public enum QuestionTypes {
         public String format(String answer) {
             return answer;
         }
-    }, yesno("Digits") {
+    },
+
+    yesno("Digits") {
         @Override
         TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
             return new YesNoQuestion(surveyId, question);
