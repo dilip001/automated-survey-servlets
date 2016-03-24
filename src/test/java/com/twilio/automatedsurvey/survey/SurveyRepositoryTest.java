@@ -10,8 +10,11 @@ import com.twilio.automatedsurvey.survey.SurveyRepository;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -42,6 +45,19 @@ public class SurveyRepositoryTest {
 
         assertThat(addedSurvey.getId(), is(notNullValue()));
         assertThat(addedSurvey.getTitle(), is(newSurveyTitle));
+    }
+
+    @Test
+    public void shouldBeAbleToReturnAllSurveysAdded() {
+        Survey survey1 = new Survey("new survey1");
+        Survey survey2 = new Survey("new survey2");
+        givenThatSurveysExists(survey1, survey2);
+
+        List<Survey> surveys = surveyRepository.all();
+
+        assertThat(surveys.size(), is(2));
+        assertThat(surveys, hasItem(hasProperty("title", is(survey1.getTitle()))));
+        assertThat(surveys, hasItem(hasProperty("title", is(survey2.getTitle()))));
     }
 
     @Test
