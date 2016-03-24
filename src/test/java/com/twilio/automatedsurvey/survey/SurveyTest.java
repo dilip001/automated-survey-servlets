@@ -15,7 +15,7 @@ public class SurveyTest {
     @Test
     public void shouldAnswerToNumericQuestion() {
         Survey survey = new Survey("Survey");
-        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.numeric));
+        survey.addQuestion(new Question(1L, "Question?", QuestionTypes.numeric));
 
         HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
             put("question", "1");
@@ -30,7 +30,7 @@ public class SurveyTest {
     @Test
     public void shouldAnswerToYesNoQuestion() {
         Survey survey = new Survey("Survey");
-        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.yesno));
+        survey.addQuestion(new Question(1L, "Question?", QuestionTypes.yesno));
 
         HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
             put("question", "1");
@@ -45,7 +45,7 @@ public class SurveyTest {
     @Test
     public void shouldAnswerToVoiceQuestion() {
         Survey survey = new Survey("Survey");
-        survey.addQuestion(new Question(1L, "Question?", Question.QuestionTypes.voice));
+        survey.addQuestion(new Question(1L, "Question?", QuestionTypes.voice));
 
         HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
             put("question", "1");
@@ -60,8 +60,8 @@ public class SurveyTest {
     @Test
     public void shouldReturnNextQuestion()  {
         Survey survey = new Survey("Survey");
-        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
-        Question question2 = new Question(2L, "Question 2?", Question.QuestionTypes.voice);
+        Question question1 = new Question(1L, "Question?", QuestionTypes.voice);
+        Question question2 = new Question(2L, "Question 2?", QuestionTypes.voice);
 
         survey.addQuestion(question1);
         survey.addQuestion(question2);
@@ -74,7 +74,7 @@ public class SurveyTest {
     @Test
     public void shouldReturnEmptyIfTheresNoNextQuestion() {
         Survey survey = new Survey("Survey");
-        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
+        Question question1 = new Question(1L, "Question?", QuestionTypes.voice);
 
         survey.addQuestion(question1);
 
@@ -86,7 +86,7 @@ public class SurveyTest {
     @Test
     public void shouldReturnFirstQuestion() {
         Survey survey = new Survey("Survey");
-        Question question1 = new Question(1L, "Question?", Question.QuestionTypes.voice);
+        Question question1 = new Question(1L, "Question?", QuestionTypes.voice);
 
         survey.addQuestion(question1);
 

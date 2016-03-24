@@ -1,6 +1,7 @@
 package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.automatedsurvey.survey.QuestionTypes;
 import com.twilio.sdk.verbs.TwiMLException;
 import org.junit.Test;
 import org.w3c.dom.Document;
@@ -19,7 +20,7 @@ public class NumericQuestionTest {
     public void shouldReturnResponseXMLRepresentation() throws IOException, SAXException,
             ParserConfigurationException, TwiMLException {
 
-        NumericQuestion numericQuestion = new NumericQuestion(1L, new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric")));
+        NumericQuestion numericQuestion = new NumericQuestion(1L, new Question("Is that a question?", QuestionTypes.numeric));
 
         String xml = numericQuestion.toEscapedXML();
 

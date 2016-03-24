@@ -3,6 +3,7 @@ package com.twilio.automatedsurvey.servlets;
 import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
 import com.twilio.automatedsurvey.servlets.twimlquestions.VoiceQuestion;
 import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.automatedsurvey.survey.QuestionTypes;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
 import com.twilio.sdk.verbs.TwiMLException;
@@ -34,7 +35,7 @@ public class QuestionServletTest {
 
     @Test
     public void shouldRespondWithSpecifiedQuestion() throws TwiMLException, IOException {
-        Question voiceQuestion = new Question(1L, "Is that a question?", Question.QuestionTypes.valueOf("voice"));
+        Question voiceQuestion = new Question(1L, "Is that a question?", QuestionTypes.valueOf("voice"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(voiceQuestion)));
 
         HttpServletRequest servletRequest = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap() {{
@@ -52,7 +53,7 @@ public class QuestionServletTest {
 
     @Test
     public void shouldRespondWithFirstQuestionWhenNoQuestionIdIsProvided() throws TwiMLException, IOException {
-        Question numericQuestion = new Question("Is that a question?", Question.QuestionTypes.valueOf("numeric"));
+        Question numericQuestion = new Question("Is that a question?", QuestionTypes.valueOf("numeric"));
         when(surveyRepository.find(anyLong())).thenReturn(Optional.of(surveyWithQuestion(numericQuestion)));
 
         HttpServletRequest servletRequest = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap() {{

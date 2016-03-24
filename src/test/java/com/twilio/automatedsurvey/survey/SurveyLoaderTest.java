@@ -26,9 +26,9 @@ public class SurveyLoaderTest {
         Set<Question> questions = survey.getQuestions();
 
         assertThat(questions.size(), is(2));
-        assertThat(questions, hasItem(new Question("What is your full name?", Question.QuestionTypes.valueOf("voice"))));
+        assertThat(questions, hasItem(new Question("What is your full name?", QuestionTypes.voice)));
         assertThat(questions, hasItem(new Question("In a scale of 1 to 9, how would you rate the quality of this call?",
-                Question.QuestionTypes.valueOf("numeric"))));
+                QuestionTypes.numeric)));
     }
 
     @Test(expected = SurveyLoadException.class)

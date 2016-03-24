@@ -1,6 +1,7 @@
 package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.automatedsurvey.survey.QuestionTypes;
 import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -16,7 +17,7 @@ public class VoiceQuestionTest {
 
     @Test
     public void shouldReturnVoiceResponseTiMLRepresentation() throws ParserConfigurationException, IOException, SAXException {
-        VoiceQuestion voiceQuestion = new VoiceQuestion(1L, new Question("Is that a question?", Question.QuestionTypes.valueOf("voice")));
+        VoiceQuestion voiceQuestion = new VoiceQuestion(1L, new Question("Is that a question?", QuestionTypes.voice));
 
         String xml = voiceQuestion.toEscapedXML();
 
