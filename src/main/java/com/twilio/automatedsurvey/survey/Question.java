@@ -24,8 +24,16 @@ public class Question {
         this.type = type;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getAnswer() {
         return answer;
+    }
+
+    public String getFormatedAnswer(){
+        return type.format(answer);
     }
 
     public void setAnswer(String answer) {
@@ -39,16 +47,35 @@ public class Question {
             public TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
                 return new VoiceQuestion(surveyId, question);
             }
+
+            @Override
+            public String format(String answer) {
+                return answer;
+            }
         },
         numeric("Digits") {
             @Override
             public TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
                 return new NumericQuestion(surveyId, question);
             }
+
+            @Override
+            public String format(String answer) {
+                return answer;
+            }
         }, yesno("Digits") {
             @Override
             TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question) {
                 return new YesNoQuestion(surveyId, question);
+            }
+
+            @Override
+            public String format(String answer) {
+                if (answer != null) {
+                    return Integer.parseInt(answer) > 0 ? "Yes" : "No";
+                }
+
+                return "";
             }
         };
 
@@ -63,6 +90,8 @@ public class Question {
         }
 
         abstract TwiMLQuestion getTwiMLQuestion(Long surveyId, Question question);
+
+        public abstract String format(String answer);
     }
 
     private Question() { /* Used by the ORM */ }
@@ -103,7 +132,4 @@ public class Question {
                 this.getBody(), this.getType());
     }
 
-    public Long getId() {
-        return id;
-    }
 }

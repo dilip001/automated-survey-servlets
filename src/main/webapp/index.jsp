@@ -55,14 +55,24 @@
                                 <div class="panel-body">
                                     <ol class="list-group">
                                         <li class="list-group-item">Answer type: ${question.type}</li>
-                                        <li class="list-group-item">Answer: ${question.answer}</li>
+                                        <c:choose>
+                                            <c:when test='${question.type == "voice"}' >
+                                                <audio controls>
+                                                    <source src="${question.formatedAnswer}" type="audio/mpeg"/>
+                                                    Your browser does not support the audio tag.
+                                                </audio>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <li class="list-group-item">Answer: ${question.formatedAnswer}</li>
+                                            </c:otherwise>
+                                        </c:choose>
                                     </ol>
                                 </div>
                             </div>
                         </c:forEach>
                     </li>
                 </ul>
-            
+
     </c:forEach>
 </div>
 </html>
