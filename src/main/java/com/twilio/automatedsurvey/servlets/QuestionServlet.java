@@ -2,6 +2,7 @@ package com.twilio.automatedsurvey.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.twilio.automatedsurvey.servlets.twimlquestions.AbstractTwiMLQuestionFactory;
 import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
@@ -12,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Singleton
 public class QuestionServlet extends HttpServlet {
@@ -39,7 +39,9 @@ public class QuestionServlet extends HttpServlet {
             question = survey.flatMap((Survey s) -> s.questionById(parsedQuestionId));
         }
 
-        TwiMLQuestion twiMLQuestion = question.map((Question q) -> q.toTwiML(surveyId))
+        AbstractTwiMLQuestionFactory factory = AbstractTwiMLQuestionFactory.getInstance(request);
+
+        TwiMLQuestion twiMLQuestion = question.map((Question q) -> factory.build(surveyId, q))
                 .orElseThrow(()  -> new RuntimeException(String.format("Survey/question %s/%s not found",
                         surveyId, questionId)));
 

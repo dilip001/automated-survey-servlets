@@ -1,11 +1,12 @@
 package com.twilio.automatedsurvey.servlets;
 
-import com.twilio.automatedsurvey.IntegrationTestHelper;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
+import com.twilio.sdk.verbs.Say;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.sdk.verbs.Verb;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class SurveyServletTest {
 
         TwilioResponseFactory twilioResponseFactory = mock(TwilioResponseFactory.class);
         TwiMLResponse twiMLResponse = new TwiMLResponse();
-        when(twilioResponseFactory.build(any(Survey.class))).thenReturn(twiMLResponse);
+        when(twilioResponseFactory.build(any(Survey.class),any(Verb.class))).thenReturn(twiMLResponse);
 
         ResponseWriter responseWriter = mock(ResponseWriter.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -35,7 +36,7 @@ public class SurveyServletTest {
 
         surveyServlet.doGet(mock(HttpServletRequest.class), response);
 
-        verify(responseWriter, times(1)).writeIn(response, twiMLResponse.toEscapedXML());
+        verify(responseWriter, times(1)).writeIn(eq(response), anyString());
     }
 
     @Test

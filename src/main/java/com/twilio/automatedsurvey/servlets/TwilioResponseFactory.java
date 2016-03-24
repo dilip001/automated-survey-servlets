@@ -1,21 +1,15 @@
 package com.twilio.automatedsurvey.servlets;
 
 import com.twilio.automatedsurvey.survey.Survey;
-import com.twilio.sdk.verbs.Redirect;
-import com.twilio.sdk.verbs.Say;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.sdk.verbs.*;
 
 public class TwilioResponseFactory {
-    public TwiMLResponse build(Survey survey) throws TwiMLException {
-        String welcomeMessage = String.format("Welcome to the %s survey", survey.getTitle());
-        Say sayWelcome = new Say(welcomeMessage);
-
+    public TwiMLResponse build(Survey survey, Verb welcomeMessage) throws TwiMLException {
         String url = String.format("question?survey=%s", survey.getId());
         Redirect redirectQuestion = new Redirect(url);
         redirectQuestion.setMethod("GET");
         TwiMLResponse twiMLResponse = new TwiMLResponse();
-        twiMLResponse.append(sayWelcome);
+        twiMLResponse.append(welcomeMessage);
         twiMLResponse.append(redirectQuestion);
 
         return twiMLResponse;

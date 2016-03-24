@@ -6,10 +6,7 @@ import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.loader.SurveyLoader;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
-import com.twilio.sdk.verbs.Redirect;
-import com.twilio.sdk.verbs.Say;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.sdk.verbs.*;
 
 import javax.inject.Singleton;
 import javax.servlet.ServletConfig;
@@ -47,11 +44,17 @@ public class SurveyServlet extends HttpServlet{
         Optional<Survey> lastSurvey = surveyRepo.findLast();
         TwiMLResponse twilioResponse;
         try {
-            twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null));
+            String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
+            Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
+            twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null), welcomeMessage);
             this.responseWriter.writeIn(response, twilioResponse.toEscapedXML());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isSms(HttpServletRequest request) {
+        return request.getParameter("MessageSid") != null;
     }
 
     @Override

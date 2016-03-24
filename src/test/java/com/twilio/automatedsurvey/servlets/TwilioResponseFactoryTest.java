@@ -1,7 +1,7 @@
 package com.twilio.automatedsurvey.servlets;
 
-import com.twilio.automatedsurvey.servlets.TwilioResponseFactory;
 import com.twilio.automatedsurvey.survey.Survey;
+import com.twilio.sdk.verbs.Say;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 import org.junit.Test;
@@ -19,7 +19,7 @@ public class TwilioResponseFactoryTest {
         String expectedWelcomeMessage = String.format("Welcome to the %s survey", survey.getTitle());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
-        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey);
+        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey, new Say(String.format("Welcome to the %s survey", survey.getTitle())));
 
         assertThat(twiMLResponse.getChildren(), hasItem(hasProperty("body", is(expectedWelcomeMessage))));
     }
@@ -30,7 +30,7 @@ public class TwilioResponseFactoryTest {
         String expectedUrl = String.format("question?survey=%s", survey.getId());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
-        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey);
+        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey, new Say(String.format("Welcome to the %s survey", survey.getTitle())));
 
         assertThat(twiMLResponse.getChildren(), hasItem(hasProperty("body", is(expectedUrl))));
     }
