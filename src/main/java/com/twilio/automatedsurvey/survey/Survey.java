@@ -24,12 +24,12 @@ public class Survey {
 
     private Survey() { /* needed by the ORM */ }
 
-    public Survey(Long id, String title) {
-        this.id = id;
-        this.title = title;
+    public Survey(String title) {
+        this(null, title);
     }
 
-    public Survey(String title) {
+    public Survey(Long id, String title) {
+        this.id = id;
         this.title = title;
     }
 
@@ -43,6 +43,10 @@ public class Survey {
 
     public Set<Question> getQuestions() {
         return questions;
+    }
+
+    public Optional<Question> getFirstQuestion() {
+        return getSortedQuestions().findFirst();
     }
 
     public void addQuestion(Question question) {
@@ -84,7 +88,4 @@ public class Survey {
         }
     }
 
-    public Optional<Question> getFirstQuestion() {
-        return getSortedQuestions().findFirst();
-    }
 }
