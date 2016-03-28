@@ -1,7 +1,10 @@
-package com.twilio.automatedsurvey.servlets;
+package com.twilio.automatedsurvey.servlets.guice;
 
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.servlet.ServletModule;
+import com.twilio.automatedsurvey.servlets.IndexServlet;
+import com.twilio.automatedsurvey.servlets.QuestionServlet;
+import com.twilio.automatedsurvey.servlets.SurveyServlet;
 
 public class AutomatedSurveyServletModule extends ServletModule {
 
