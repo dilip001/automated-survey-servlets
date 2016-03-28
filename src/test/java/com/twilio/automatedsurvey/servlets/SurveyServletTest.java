@@ -33,7 +33,7 @@ public class SurveyServletTest {
 
         SurveyServlet surveyServlet = new SurveyServlet(surveyRepo, twilioResponseFactory, responseWriter);
 
-        surveyServlet.doGet(mock(HttpServletRequest.class), response);
+        surveyServlet.doGet(MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<>()), response);
 
         verify(responseWriter, times(1)).writeIn(eq(response), anyString());
     }

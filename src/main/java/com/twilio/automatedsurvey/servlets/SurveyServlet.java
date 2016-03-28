@@ -14,6 +14,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -43,14 +44,33 @@ public class SurveyServlet extends HttpServlet{
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
         Optional<Survey> lastSurvey = surveyRepo.findLast();
         TwiMLResponse twilioResponse;
+        HttpSession session = request.getSession(true);
+
         try {
-            String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
-            Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
-            twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null), welcomeMessage);
-            this.responseWriter.writeIn(response, twilioResponse.toEscapedXML());
+            if (isSmsAnswer(request)) {
+                String survey = session.getAttribute("lastSurvey").toString();
+                String lastQuestion = session.getAttribute("lastQuestion").toString();
+
+                TwiMLResponse twiMLResponse = new TwiMLResponse();
+                Redirect redirect = new Redirect(String.format("survey?survey=%s&question=%s", survey, lastQuestion));
+                redirect.setMethod("POST");
+                twiMLResponse.append(redirect);
+                this.responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
+
+            } else {
+                String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
+                Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
+                twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null), welcomeMessage);
+                this.responseWriter.writeIn(response, twilioResponse.toEscapedXML());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean isSmsAnswer(HttpServletRequest request) {
+        HttpSession session = request.getSession(true);
+        return session.getAttribute("lastSurvey") != null;
     }
 
     private boolean isSms(HttpServletRequest request) {
@@ -64,21 +84,35 @@ public class SurveyServlet extends HttpServlet{
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
 
-        Question answeredQuestion = survey.answer(request.getParameterMap());
+        Question answeredQuestion;
+        if (isSms(request)) {
+            answeredQuestion = survey.answerSMS(request.getParameterMap());
+        } else {
+            answeredQuestion = survey.answer(request.getParameterMap());
+        }
         surveyRepo.update(survey);
 
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
 
         TwiMLResponse twiMLResponse = nextQuestion.map((Question q) -> buildRedirectTwiMLMessage(surveyId, q))
-                .orElse(buildThankYouTwiMLResponse(survey.getTitle()));
+                .orElse(buildThankYouTwiMLResponse(survey.getTitle(), request));
 
         responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
     }
 
-    private TwiMLResponse buildThankYouTwiMLResponse(String surveyTitle) {
+    private TwiMLResponse buildThankYouTwiMLResponse(String surveyTitle, HttpServletRequest request) {
         try {
             TwiMLResponse response = new TwiMLResponse();
-            response.append(new Say(String.format("Thank you for taking the %s survey. Good bye.", surveyTitle)));
+
+            Verb message;
+            String realMessage = String.format("Thank you for taking the %s survey. Good bye.", surveyTitle);
+            if (isSms(request)) {
+                message = new Message(realMessage);
+            } else {
+                message = new Say(realMessage);
+            }
+
+            response.append(message);
             return response;
         } catch (TwiMLException e) {
             throw new RuntimeException(e);

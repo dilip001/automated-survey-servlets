@@ -11,6 +11,7 @@ import com.twilio.automatedsurvey.survey.SurveyRepository;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class QuestionServlet extends HttpServlet {
         Long surveyId = Long.parseLong(request.getParameter("survey"));
         String questionId = request.getParameter("question");
 
+
         Optional<Survey> survey = surveyRepository.find(surveyId);
         Optional<Question> question;
 
@@ -44,6 +46,10 @@ public class QuestionServlet extends HttpServlet {
         TwiMLQuestion twiMLQuestion = question.map((Question q) -> factory.build(surveyId, q))
                 .orElseThrow(()  -> new RuntimeException(String.format("Survey/question %s/%s not found",
                         surveyId, questionId)));
+
+        HttpSession session = request.getSession(true);
+        session.setAttribute("lastSurvey", surveyId);
+        session.setAttribute("lastQuestion", question.get().getId());
 
         String xml = twiMLQuestion.toEscapedXML();
 
