@@ -1,10 +1,9 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.twilio.automatedsurvey.servlets.MockedHttpServletRequestFactory;
 import org.junit.Test;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,12 +16,12 @@ public class SurveyTest {
         Survey survey = new Survey("Survey");
         survey.addQuestion(new Question(1L, "Question?", QuestionTypes.numeric));
 
-        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
-            put("question", "1");
-            put("Digits", "1");
-        }});
+        Map<String, String[]> parameterMap = new HashMap<String, String[]>() {{
+            put("question", new String[]{"1"});
+            put("Digits", new String[]{"1"});
+        }};
 
-        Question question = survey.answer(request);
+        Question question = survey.answer(parameterMap);
 
         assertThat(question.getAnswer(), is("1"));
     }
@@ -32,12 +31,13 @@ public class SurveyTest {
         Survey survey = new Survey("Survey");
         survey.addQuestion(new Question(1L, "Question?", QuestionTypes.yesno));
 
-        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
-            put("question", "1");
-            put("Digits", "1");
-        }});
 
-        Question question = survey.answer(request);
+        Map<String, String[]> parameterMap = new HashMap<String, String[]>() {{
+            put("question", new String[]{"1"});
+            put("Digits", new String[]{"1"});
+        }};
+
+        Question question = survey.answer(parameterMap);
 
         assertThat(question.getAnswer(), is("1"));
     }
@@ -47,12 +47,13 @@ public class SurveyTest {
         Survey survey = new Survey("Survey");
         survey.addQuestion(new Question(1L, "Question?", QuestionTypes.voice));
 
-        HttpServletRequest request = MockedHttpServletRequestFactory.getMockedRequestWithParameters(new HashMap<String, String>() {{
-            put("question", "1");
-            put("RecordingUrl", "answer");
-        }});
 
-        Question question = survey.answer(request);
+        Map<String, String[]> parameterMap = new HashMap<String, String[]>() {{
+            put("question", new String[]{"1"});
+            put("RecordingUrl", new String[]{"answer"});
+        }};
+
+        Question question = survey.answer(parameterMap);
 
         assertThat(question.getAnswer(), is("answer"));
     }

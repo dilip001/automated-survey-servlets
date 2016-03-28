@@ -3,7 +3,6 @@ package com.twilio.automatedsurvey.servlets;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
-import com.twilio.sdk.verbs.Say;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 import com.twilio.sdk.verbs.Verb;
@@ -57,6 +56,6 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(request);
+        verify(mockedSurvey, times(1)).answer(request.getParameterMap());
     }
 }

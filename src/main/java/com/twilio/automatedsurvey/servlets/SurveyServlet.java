@@ -64,7 +64,7 @@ public class SurveyServlet extends HttpServlet{
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
 
-        Question answeredQuestion = survey.answer(request);
+        Question answeredQuestion = survey.answer(request.getParameterMap());
         surveyRepo.update(survey);
 
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);
