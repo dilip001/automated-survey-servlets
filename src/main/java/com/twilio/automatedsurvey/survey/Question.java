@@ -51,10 +51,6 @@ public class Question {
         return type;
     }
 
-    public TwiMLQuestion toTwiML(Long surveyId) {
-        return type.getTwiMLQuestion(surveyId, this);
-    }
-
     @Override
     public boolean equals(Object o) {
         boolean result = false;
