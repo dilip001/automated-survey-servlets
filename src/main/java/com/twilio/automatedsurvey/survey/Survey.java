@@ -4,6 +4,7 @@ import com.google.inject.persist.Transactional;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -58,28 +59,28 @@ public class Survey {
     }
 
     @Transactional
-    public Question answer(Map<String, String[]> parameters) {
-        String questionId = parameters.get("question")[0];
-
-        Optional<Question> question = questionById(Long.parseLong(questionId));
-
-        return question.map((Question q) -> {
-            String answerKey = q.getType().getAnswerKey();
-
-            q.setAnswer(parameters.get(answerKey)[0]);
-            return q;
-        }).orElseThrow(() -> new RuntimeException(String.format("Question %s from Survey %s not found", id, questionId)));
+    public Question answerCall(Map<String, String[]> parameters) {
+        return answerUsing(parameters, (Question question) -> {
+            String answerKey = question.getType().getAnswerKey();
+            question.setAnswer(parameters.get(answerKey)[0]);
+            return question;
+        });
     }
 
     public Question answerSMS(Map<String, String[]> parameters) {
+        return answerUsing(parameters, (Question q) -> {
+            q.setAnswer(parameters.get("Body")[0]);
+            return q;
+        });
+    }
+
+    private Question answerUsing(Map<String, String[]> parameters, Function<Question, Question> extractAndApplyAnswer) {
         String questionId = parameters.get("question")[0];
 
         Optional<Question> question = questionById(Long.parseLong(questionId));
 
-        return question.map((Question q) -> {
-            q.setAnswer(parameters.get("Body")[0]);
-            return q;
-        }).orElseThrow(() -> new RuntimeException(String.format("Question %s from Survey %s not found", id, questionId)));
+        return question.map(extractAndApplyAnswer)
+                .orElseThrow(() -> new RuntimeException(String.format("Question %s from Survey %s not found", id, questionId)));
     }
 
     public Optional<Question> questionById(Long questionId) {

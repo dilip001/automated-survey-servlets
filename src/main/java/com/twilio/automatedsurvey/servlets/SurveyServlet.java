@@ -56,7 +56,6 @@ public class SurveyServlet extends HttpServlet{
                 redirect.setMethod("POST");
                 twiMLResponse.append(redirect);
                 this.responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
-
             } else {
                 String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
                 Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
@@ -84,12 +83,9 @@ public class SurveyServlet extends HttpServlet{
 
         Survey survey = surveyRepo.find(surveyId).orElseThrow(() -> new RuntimeException("Survey was not found"));
 
-        Question answeredQuestion;
-        if (isSms(request)) {
-            answeredQuestion = survey.answerSMS(request.getParameterMap());
-        } else {
-            answeredQuestion = survey.answer(request.getParameterMap());
-        }
+        Question answeredQuestion = isSms(request) ? survey.answerSMS(request.getParameterMap()) :
+                survey.answerCall(request.getParameterMap());
+
         surveyRepo.update(survey);
 
         Optional<Question> nextQuestion = survey.getNextQuestion(answeredQuestion);

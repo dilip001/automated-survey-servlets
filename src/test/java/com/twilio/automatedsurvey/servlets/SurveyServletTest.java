@@ -56,6 +56,6 @@ public class SurveyServletTest {
 
         surveyServlet.doPost(request, mock(HttpServletResponse.class));
 
-        verify(mockedSurvey, times(1)).answer(request.getParameterMap());
+        verify(mockedSurvey, times(1)).answerCall(request.getParameterMap());
     }
 }

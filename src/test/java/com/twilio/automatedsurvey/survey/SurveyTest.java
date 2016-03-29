@@ -21,7 +21,7 @@ public class SurveyTest {
             put("Digits", new String[]{"1"});
         }};
 
-        Question question = survey.answer(parameterMap);
+        Question question = survey.answerCall(parameterMap);
 
         assertThat(question.getAnswer(), is("1"));
     }
@@ -37,7 +37,7 @@ public class SurveyTest {
             put("Digits", new String[]{"1"});
         }};
 
-        Question question = survey.answer(parameterMap);
+        Question question = survey.answerCall(parameterMap);
 
         assertThat(question.getAnswer(), is("1"));
     }
@@ -53,7 +53,7 @@ public class SurveyTest {
             put("RecordingUrl", new String[]{"answer"});
         }};
 
-        Question question = survey.answer(parameterMap);
+        Question question = survey.answerCall(parameterMap);
 
         assertThat(question.getAnswer(), is("answer"));
     }
