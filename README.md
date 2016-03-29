@@ -12,7 +12,17 @@ An example application that implements an Automated Survey using Twilio.
 
 1. The application uses Gradle to manage dependencies.
 
-1. Edit the persistence configuration file `src/main/resources/persistence.xml` to match your configuration.
+1. Edit the sample configuration file `.env.example` and edit it to match your configuration.
+
+   Once you have edited the `.env.example` file, if you are using a unix operating system,
+   just use the `source` command to load the variables into your environment:
+
+   ```bash
+   $ source .env.example
+   ```
+
+   If you are using a different operating system, make sure that all the
+   variables from the .env.example file are loaded into your environment.
 
 1. Configure Twilio to call your webhooks.
 

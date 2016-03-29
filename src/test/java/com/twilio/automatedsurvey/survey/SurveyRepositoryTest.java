@@ -10,6 +10,7 @@ import com.twilio.automatedsurvey.survey.SurveyRepository;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +27,24 @@ public class SurveyRepositoryTest {
 
     @Before
     public void setup() {
-        Injector injector = Guice.createInjector(new JpaPersistModule("testJpaUnit"));
+        JpaPersistModule testPersistModule = configPersistModule();
+        Injector injector = Guice.createInjector(testPersistModule);
         initPersistService(injector);
         surveyRepository = injector.getInstance(SurveyRepository.class);
         integrationTestHelper = injector.getInstance(IntegrationTestHelper.class);
+
+        integrationTestHelper.cleanTable(Question.class);
         integrationTestHelper.cleanTable(Survey.class);
+    }
+
+    private JpaPersistModule configPersistModule() {
+        JpaPersistModule testPersistModule = new JpaPersistModule("jpaUnit");
+        testPersistModule.properties(new HashMap<String, String>(){{
+            put("javax.persistence.jdbc.url", System.getenv("TEST_DATABASE_URL"));
+            put("javax.persistence.jdbc.user", System.getenv("TEST_DATABASE_USER"));
+            put("javax.persistence.jdbc.password", System.getenv("TEST_DATABASE_PASSWORD"));
+        }});
+        return testPersistModule;
     }
 
     private void initPersistService(Injector injector) {
