@@ -33,17 +33,7 @@ public class SurveyServlet extends HttpServlet{
     }
 
     @Override
-    @Transactional
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-        SurveyLoader loader = new SurveyLoader("survey.json");
-        surveyRepo.add(loader.load());
-    }
-
-    @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
-        Optional<Survey> lastSurvey = surveyRepo.findLast();
-        TwiMLResponse twilioResponse;
         HttpSession session = request.getSession(true);
 
         try {
@@ -51,20 +41,41 @@ public class SurveyServlet extends HttpServlet{
                 String survey = session.getAttribute("lastSurvey").toString();
                 String lastQuestion = session.getAttribute("lastQuestion").toString();
 
-                TwiMLResponse twiMLResponse = new TwiMLResponse();
-                Redirect redirect = new Redirect(String.format("survey?survey=%s&question=%s", survey, lastQuestion));
-                redirect.setMethod("POST");
-                twiMLResponse.append(redirect);
-                this.responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
+                redirectToAnswerEndpoint(response, survey, lastQuestion);
             } else {
-                String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
+                Survey newSurvey = createSurveyInstance();
+                TwiMLResponse twilioResponse;
+
+                String message = String.format("Welcome to the %s survey", newSurvey.getTitle());
                 Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
-                twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null), welcomeMessage);
+                twilioResponse = twilioResponseFactory.build(newSurvey, welcomeMessage);
                 this.responseWriter.writeIn(response, twilioResponse.toEscapedXML());
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Transactional
+    private Survey createSurveyInstance() {
+        SurveyLoader loader = new SurveyLoader("survey.json");
+        return surveyRepo.add(loader.load());
+    }
+
+    private TwiMLResponse buildWelcomeMessage(HttpServletRequest request, Optional<Survey> lastSurvey) throws TwiMLException {
+        TwiMLResponse twilioResponse;
+        String message = String.format("Welcome to the %s survey", lastSurvey.map((Survey s) -> s.getTitle()).orElse(""));
+        Verb welcomeMessage = isSms(request) ? new Message(message) : new Say(message);
+        twilioResponse = twilioResponseFactory.build(lastSurvey.orElse(null), welcomeMessage);
+        return twilioResponse;
+    }
+
+    private void redirectToAnswerEndpoint(HttpServletResponse response, String survey, String lastQuestion) throws TwiMLException, IOException {
+        TwiMLResponse twiMLResponse = new TwiMLResponse();
+        Redirect redirect = new Redirect(String.format("survey?survey=%s&question=%s", survey, lastQuestion));
+        redirect.setMethod("POST");
+        twiMLResponse.append(redirect);
+        this.responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
     }
 
     private boolean isSmsAnswer(HttpServletRequest request) {

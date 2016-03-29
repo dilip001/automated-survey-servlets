@@ -22,7 +22,7 @@ public class SurveyServletTest {
     @Test
     public void shouldWelcomeAndRedirectRequest() throws TwiMLException, IOException {
         SurveyRepository surveyRepo = mock(SurveyRepository.class);
-        when(surveyRepo.findLast()).thenReturn(Optional.empty());
+        when(surveyRepo.add(any(Survey.class))).thenReturn(new Survey("test"));
 
         TwilioResponseFactory twilioResponseFactory = mock(TwilioResponseFactory.class);
         TwiMLResponse twiMLResponse = new TwiMLResponse();
