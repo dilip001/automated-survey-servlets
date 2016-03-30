@@ -1,0 +1,205 @@
+.chapter(data-title='Introduction')
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
+    data-highlight='35-57')
+    :markdown
+      ## About this application
+
+        This Java Servlets web application performs automated phone surveys
+        using Twilio's API and TwiML. In addition to that,
+        the application also displays the survey results. The majority of
+        the application's routes will be accessed by Twilio itself since survey-takers
+        will interact with the application through the phone voice call and SMS, not
+        through the web.
+
+        Questions in surveys might be voice responses, numeric responses and yes-no responses
+        when the survey is requested by a phonecall. When the user interacts with the survey
+        through SMS all responses are handled as text. The source for the application [can be found in
+        GitHub.](https://github.com/TwilioDevEd/automated-survey-servlets)
+
+        In this tutorial, we'll highlight the code that interacts with
+        Twilio and in turn makes the application tick.  [Check out the project
+        README on
+        GitHub](https://github.com/TwilioDevEd/automated-survey-spring/blob/master/README.md)
+        to see how to run the code yourself.
+
+        Let's get started! Click the right arrow above to advance to the next code snippet.
+
+      #### See Also
+
+      * [The Twilio Java Helper Library](https://www.twilio.com/docs/java/install).
+      * [TwiML: Java Quickstart Tutorial](https://www.twilio.com/docs/quickstart/java).
+      * [TwiMLTM: the Twilio Markup Language](https://www.twilio.com/docs/api/twiml).
+
+  .step(data-file='.env.example')
+    :markdown
+      ## Configure the application
+
+      The application requirements are minimal. The only necessary
+      component is a running PostgreSQL database. Copy the sample configuration file `.env.example`
+      and edit it to match your configuration. Once you have edited the `.env.example` file,
+      if you are using a unix operating system, just use the source command to load the variables into your environment:
+
+      ```
+      source .env.example
+      ```
+
+      If you are using a different operating system, make sure that all the variables from the .env.example
+      file are loaded into your environment.
+
+      ---
+
+      **See Also:**
+      * [Your Available Phone Numbers](https://www.twilio.com/user/account/phone-numbers/incoming)
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java', data-highlight='46-52, 59-63')
+    :markdown
+      ## Create a survey
+
+      In order to perform automated surveys we first need to have some questions to ask. For your convenience,
+      the application's repository already includes one survey that will be loaded into the database. If the database
+      is configured correctly every time that a user requests a survey, the application will create a new one
+      for that user.
+
+      You can modify the questions from the survey by editing the
+      [survey.json](https://github.com/TwilioDevEd/automated-survey-servlets/blob/master/src/main/resources/survey.json)
+      file located in the application resources folder and re-running the app.
+
+      We want users to take our survey, so next we are going implement
+      the interaction of the caller with the application.
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
+    data-highlight='46-52')
+    :markdown
+      ## Respond to Twilio's initial request
+
+      Whenever one of [your Twilio phone
+      numbers](https://www.twilio.com/user/account/phone-numbers/incoming)
+      receives a call or a SMS, Twilio will make an HTTP request to the voice request
+      URL configured under it with the HTTP method specified (either GET
+      or POST).
+
+      For this application Twilio should be configured to make a GET request to
+      the application's `/survey` endpoint. Here the application will create and return a new survey,
+      and after stating its name and welcoming the user to it using TwiML's
+      [`<Say>`](https://www.twilio.com/docs/api/twiml/say) verb, it will redirect the call
+      to the first question using the [`<Redirect>`](https://www.twilio.com/docs/api/twiml/redirect).
+      verb.
+
+      Next we will handle the request made after the redirect.
+
+      ---
+
+      **See Also:**
+      * [TwiML Voice: <Redirect>](https://www.twilio.com/docs/api/twiml/redirect)
+      * [Twilio webhooks](https://www.twilio.com/platform/webhooks)
+      * [HTTP methods](http://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html)
+      * [TwiML Voice: Your Response](https://www.twilio.com/docs/api/twiml/your_response)
+      * [TwiML Voice: <Say>](https://www.twilio.com/docs/api/twiml/say)
+      * [TwiML Voice: <Redirect>](https://www.twilio.com/docs/api/twiml/redirect)
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/QuestionServlet.java',
+    data-highlight='29-59')
+    :markdown
+      ## Ask the caller a question
+
+      At this point the Twilio client has made a request for the first
+      question. We will use the
+      [twilio-java](https://github.com/twilio/twilio-java) library to
+      generate a response. First we will ask a question, then say
+      instructions on how to answer that question and finally
+      record the caller's answer to the question. It's important to
+      keep in mind that instructions on how to answer a question depend on the
+      type of question we ask. We also need record the answer
+      differently if a given question requires keypad input or voice
+      input.
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
+    data-highlight='55-99')
+    :markdown
+      ## Record the caller's response
+
+      Recording the answer is slightly more involved. If the question
+      is of kind "voice" then we use the
+      [`<Record>`](https://www.twilio.com/docs/api/twiml/record)
+      verb. However, if we expect dialpad input we use the the
+      [`<Gather>`](https://www.twilio.com/docs/api/twiml/gather)
+      verb. Both verbs take an `action` attribute and a `method`
+      attribute. Twilio's client will use both attributes to make a
+      request we can use to store the caller's answer to the question.
+
+      Since we want to create a new resource in our server, the HTTP
+      method will be `POST` for both `<Gather>` and `<Record>`. The
+      `action` URL will be `/save_response?qid=<question_id>`
+      for both TwiML verbs.
+
+      Now that the caller has answered our question we want to store
+      the answer.
+
+      ---
+
+      **See Also:**
+      * [TwiML Voice: <Gather>](https://www.twilio.com/docs/api/twiml/gather)
+      * [TwiML Voice: <Record>](https://www.twilio.com/docs/api/twiml/record)
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
+    data-highlight='33-91')
+    :markdown
+      ## Store a question's answer
+
+      Now Twilio has made a POST request to the
+      `/survey?survey=<survey_id>&question=<question_id>` URL.  The request includes
+      everything we need to record the caller's answer to our
+      question. Aside from the `<survey_id>` and `<question_id>` parameters,
+      Twilio includes a [wealth of information](https://www.twilio.com/docs/api/twiml/twilio_request)
+      with every request. For this sample application we will store
+      the `RecordingUrl` or `Digits` parameter for voice and
+      yes-no/numeric answers accordingly.
+
+      Most surveys include more than a single question so we must now
+      redirect the user to the next question in this survey using the
+      [<Redirect>](https://www.twilio.com/docs/api/twiml/redirect) verb
+      again.
+
+      If there are no more questions available on the survey, the user will be notified via the
+      [say verb](https://www.twilio.com/docs/api/twiml/say) and then hangup the call using the
+      [hangup verb](https://www.twilio.com/docs/api/twiml/hangup)
+
+      ---
+
+      **See Also:**
+      * [TwiML Voice: Twilio's Request](https://www.twilio.com/docs/api/twiml/twilio_request)
+      * [TwiML Voice: <Redirect>](https://www.twilio.com/docs/api/twiml/redirect)
+      * [TwiML Voice: <Say>](https://www.twilio.com/docs/api/twiml/say)
+      * [TwiML Voice: <Hangup>](https://www.twilio.com/docs/api/twiml/hangup)
+
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
+    data-highlight='30-52')
+    :markdown
+      ## Display the survey results
+
+      For this route we simply query the database using a JPA query
+      and then display a list of all the surveys taken and its questons
+      with the respective answerts.
+
+      You can access this page in the applications root route `/`.
+
+  .step
+    :markdown
+      ## Where to next?
+
+      It's done! If you have configured one of your voice-enable Twilio
+      numbers to the application built in this tutorial you should be
+      able to take the survey and see the results under the root route of
+      the application. We hope you found this sample application
+      useful.  If you're a Java developer working with Twilio, you
+      might enjoy these other tutorials:
+
+      ### [Appointment Reminders](https://www.twilio.com/docs/howto/walkthrough/appointment-reminders/java/spark)
+      Automate the process of reaching out to your customers in advance of an upcoming appointment.
+
+      ### [How-Tos and Example Code](https://www.twilio.com/docs/howto)
+      Tutorials in different programming languages
+
+      ### Did this help?
+      Thanks for checking out this tutorial! If you have any feedback to share with us,
+      we'd love to hear it. Tweet [@twilio](twitter.com/twilio) to let us know what you think.
