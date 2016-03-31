@@ -26,7 +26,7 @@ An example application that implements an Automated Survey using Twilio.
 
 1. Configure Twilio to call your webhooks.
 
-   You will need to configure Twilio to call your application when SMS and calls are received.
+   You will need to configure Twilio to call your application when SMSs and calls are received.
 
    You will need to provision at least one Twilio number with SMS and voice capabilities
    so the application's users can trigger the survey. You can buy a number [right
@@ -52,7 +52,7 @@ An example application that implements an Automated Survey using Twilio.
    ```
 
    Once you have started ngrok, update your Twilio's number SMS and voice URL
-   setting to use your ngrok hostname, so it will look something like
+   setting to use your ngrok hostname. It will look something like
    this:
 
    ```
