@@ -1,12 +1,11 @@
 package com.twilio.automatedsurvey.servlets;
 
-import com.twilio.automatedsurvey.servlets.twimlquestions.NumericQuestion;
-import com.twilio.automatedsurvey.servlets.twimlquestions.VoiceQuestion;
+import com.twilio.automatedsurvey.servlets.twimlquestions.AbstractTwiMLQuestionFactory;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.QuestionTypes;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
-import com.twilio.sdk.verbs.TwiMLException;
+import com.twilio.sdk.verbs.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,9 +44,12 @@ public class QuestionServletTest {
 
         QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
 
+        AbstractTwiMLQuestionFactory questionFactory = TelephoneTwiMLQuestionFactory.getInstance(servletRequest);
+        long surveyId = 1L;
+        String expectedXmlResponse = questionFactory.build(surveyId, voiceQuestion).toEscapedXML();
+
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new VoiceQuestion(1L, voiceQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 
@@ -62,9 +64,12 @@ public class QuestionServletTest {
 
         QuestionServlet questionServlet = new QuestionServlet(surveyRepository, responseWriter);
 
+        AbstractTwiMLQuestionFactory questionFactory = TelephoneTwiMLQuestionFactory.getInstance(servletRequest);
+        long surveyId = 1l;
+        String expectedXmlResponse = questionFactory.build(surveyId, numericQuestion).toEscapedXML();
+
         questionServlet.doGet(servletRequest, servletResponse);
 
-        String expectedXmlResponse = new NumericQuestion(1L, numericQuestion).toEscapedXML();
         verify(responseWriter, times(1)).writeIn(eq(servletResponse), eq(expectedXmlResponse));
     }
 

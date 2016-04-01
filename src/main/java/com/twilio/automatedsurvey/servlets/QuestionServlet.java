@@ -3,10 +3,10 @@ package com.twilio.automatedsurvey.servlets;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.twilio.automatedsurvey.servlets.twimlquestions.AbstractTwiMLQuestionFactory;
-import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
+import com.twilio.sdk.verbs.TwiMLResponse;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,17 +43,15 @@ public class QuestionServlet extends HttpServlet {
 
         AbstractTwiMLQuestionFactory factory = AbstractTwiMLQuestionFactory.getInstance(request);
 
-        TwiMLQuestion twiMLQuestion = question.map((Question q) -> factory.build(surveyId, q))
-                .orElseThrow(()  -> new RuntimeException(String.format("Survey/question %s/%s not found",
+        TwiMLResponse twiMLResponse = question.map((Question q) -> factory.build(surveyId, q))
+                .orElseThrow(() -> new RuntimeException(String.format("Survey/question %s/%s not found",
                         surveyId, questionId)));
 
         HttpSession session = request.getSession(true);
         session.setAttribute("lastSurvey", surveyId);
         session.setAttribute("lastQuestion", question.get().getId());
 
-        String xml = twiMLQuestion.toEscapedXML();
-
-        responseWriter.writeIn(response, xml);
+        responseWriter.writeIn(response, twiMLResponse.toEscapedXML());
     }
 
 }

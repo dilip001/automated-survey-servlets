@@ -7,13 +7,13 @@ import com.twilio.sdk.verbs.TwiMLResponse;
 
 public class SMSTwiMLQuestionFactory extends AbstractTwiMLQuestionFactory {
     @Override
-    public TwiMLQuestion build(Long surveyId, Question question) {
+    public TwiMLResponse build(Long surveyId, Question question) {
         TwiMLResponse response = new TwiMLResponse();
         try {
             response.append(new Message(question.getBody()));
         } catch (TwiMLException e) {
             e.printStackTrace();
         }
-        return () -> response.toEscapedXML();
+        return response;
     }
 }

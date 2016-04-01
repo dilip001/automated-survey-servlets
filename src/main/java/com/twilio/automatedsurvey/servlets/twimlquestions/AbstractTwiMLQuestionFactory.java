@@ -2,6 +2,7 @@ package com.twilio.automatedsurvey.servlets.twimlquestions;
 
 import com.twilio.automatedsurvey.servlets.TelephoneTwiMLQuestionFactory;
 import com.twilio.automatedsurvey.survey.Question;
+import com.twilio.sdk.verbs.TwiMLResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,5 +16,5 @@ public abstract class AbstractTwiMLQuestionFactory {
         }
     }
 
-    public abstract TwiMLQuestion build(Long surveyId, Question question);
+    public abstract TwiMLResponse build(Long surveyId, Question question);
 }
