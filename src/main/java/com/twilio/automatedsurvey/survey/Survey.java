@@ -61,7 +61,9 @@ public class Survey {
     @Transactional
     public Question answerCall(Map<String, String[]> parameters) {
         return answerUsing(parameters, (Question question) -> {
-            String answerKey = question.getType().getAnswerKey();
+            String answerKey = parameters.containsKey("TranscriptionText") ?
+                    "TranscriptionText" : question.getType().getAnswerKey();
+
             question.setAnswer(parameters.get(answerKey)[0]);
             return question;
         });

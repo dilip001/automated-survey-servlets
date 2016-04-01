@@ -36,9 +36,11 @@ public class TelephoneTwiMLQuestionFactory extends AbstractTwiMLQuestionFactory 
             twiMLResponse.append(new Pause());
             twiMLResponse.append(new Say(question.getBody()));
             Record record = new Record();
+            record.setTranscribe(true);
+            record.setTranscribeCallback("survey?survey="+ surveyId +"&amp;question="+question.getId());
             record.setAction("survey?survey="+ surveyId +"&amp;question="+question.getId());
             record.setMethod("POST");
-            record.setFinishOnKey("#");
+            record.setMaxLength(6);
             twiMLResponse.append(record);
 
         } catch (TwiMLException e) {

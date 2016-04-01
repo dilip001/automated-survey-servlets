@@ -56,7 +56,7 @@
                                     <ol class="list-group">
                                         <li class="list-group-item">Answer type: ${question.type}</li>
                                         <c:choose>
-                                            <c:when test='${question.type == "voice"}' >
+                                            <c:when test='${question.type == "voice" && question.answer.startsWith("http") }' >
                                                 <audio controls>
                                                     <source src="${question.formatedAnswer}" type="audio/mpeg"/>
                                                     Your browser does not support the audio tag.

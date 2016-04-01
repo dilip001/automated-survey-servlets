@@ -96,5 +96,25 @@ public class SurveyTest {
         assertThat(nextQuestion.get(), is(question1));
     }
 
+    @Test
+    public void shouldAnswerUsingTranscriptionWhenPresent() {
+        Survey survey = new Survey("Survey");
+        Question question = new Question(1L, "question?", QuestionTypes.voice);
+
+        survey.addQuestion(question);
+
+        final String expectedAnswer = "transcription";
+
+        Map<String, String[]> parameters = new HashMap<String, String[]>(){{
+            put("question", new String[]{"1"});
+            put("RecordingUrl", new String[]{"recording url"});
+            put("TranscriptionText", new String[]{expectedAnswer});
+        }};
+
+        Question answeredQuestion = survey.answerCall(parameters);
+
+        assertThat(answeredQuestion.getAnswer(), is(expectedAnswer));
+    }
+
 
 }
