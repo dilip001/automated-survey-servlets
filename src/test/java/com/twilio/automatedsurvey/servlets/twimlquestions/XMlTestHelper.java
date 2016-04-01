@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 public class XMlTestHelper {
-    static Document createDocumentFromXml(String input) throws ParserConfigurationException, SAXException, IOException {
+    public static Document createDocumentFromXml(String input) throws ParserConfigurationException, SAXException, IOException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 

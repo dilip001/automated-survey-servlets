@@ -1,7 +1,5 @@
 package com.twilio.automatedsurvey.survey;
 
-import com.twilio.automatedsurvey.servlets.twimlquestions.TwiMLQuestion;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
