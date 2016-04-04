@@ -1,6 +1,8 @@
 language: java
 jdk:
   - oraclejdk8
+service:
+  - posgresql
 env:
   global:
   - TEST_DATABASE_URL=automated-survey-servlets-test
