@@ -39,10 +39,16 @@ public class SurveyRepositoryTest {
 
     private JpaPersistModule configPersistModule() {
         JpaPersistModule testPersistModule = new JpaPersistModule("jpaUnit");
+
+        String databaseUrl = System.getenv("TEST_DATABASE_URL");
+        String databasePassword = System.getenv("TEST_DATABASE_PASSWORD");
+        String databaseUser = System.getenv("TEST_DATABASE_USER") == null ?
+                "" : System.getenv("TEST_DATABASE_USER");
+
         testPersistModule.properties(new HashMap<String, String>(){{
-            put("javax.persistence.jdbc.url", System.getenv("TEST_DATABASE_URL"));
-            put("javax.persistence.jdbc.user", System.getenv("TEST_DATABASE_USER"));
-            put("javax.persistence.jdbc.password", System.getenv("TEST_DATABASE_PASSWORD"));
+            put("javax.persistence.jdbc.url", databaseUrl);
+            put("javax.persistence.jdbc.user", databaseUser);
+            put("javax.persistence.jdbc.password", databasePassword);
         }});
         return testPersistModule;
     }
