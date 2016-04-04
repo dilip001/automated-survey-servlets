@@ -5,7 +5,7 @@ service:
   - posgresql
 env:
   global:
-  - TEST_DATABASE_URL=automated-survey-servlets-test
+  - TEST_DATABASE_URL=jdbc:postgresql://localhost:5432/automated-survey-servlets-test
   - TEST_DATABASE_USER=postgres
 before_script:
 - psql -c 'create database "automated-survey-servlets-test";' -U postgres
