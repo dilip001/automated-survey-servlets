@@ -1,8 +1,8 @@
 # Automated Survey Servlets
 [![Build Status](https://travis-ci.org/TwilioDevEd/clicktocall-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/clicktocall-servlets)
 
-An example application implementing Click to Call using Twilio.
-An example application that implements an Automated Survey using Twilio.
+An application example implementing Click to Call using Twilio.
+An application example that implements an Automated Survey using Twilio.
 
 [Read the full tutorial here](https://www.twilio.com/docs/tutorials/walkthrough/automated-survey/java/servlet)!
 
@@ -31,7 +31,7 @@ An example application that implements an Automated Survey using Twilio.
    You will need to provision at least one Twilio number with SMS and voice capabilities
    so the application's users can trigger the survey. You can buy a number [right
    here](//www.twilio.com/user/account/phone-numbers/search). Once you have
-   a number you need to configure your number to work with your application. Open
+   a number you need to configure it to work with your application. Open
    [the number management page](//www.twilio.com/user/account/phone-numbers/incoming)
    and open a number's configuration by clicking on it.
 
