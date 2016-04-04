@@ -1,5 +1,5 @@
 # Automated Survey Servlets
-[![Build Status](https://travis-ci.org/TwilioDevEd/clicktocall-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/clicktocall-servlets)
+[![Build Status](https://travis-ci.org/TwilioDevEd/automated-survey-servlets.svg?branch=master)](https://travis-ci.org/TwilioDevEd/automated-survey-servlets)
 
 An application example implementing Click to Call using Twilio.
 An application example that implements an Automated Survey using Twilio.
