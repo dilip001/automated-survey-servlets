@@ -4,8 +4,6 @@
 An application example implementing Click to Call using Twilio.
 An application example that implements an Automated Survey using Twilio.
 
-[Read the full tutorial here](https://www.twilio.com/docs/tutorials/walkthrough/automated-survey/java/servlet)!
-
 ## Run the application
 
 1. Clone the repository and `cd` into it.
