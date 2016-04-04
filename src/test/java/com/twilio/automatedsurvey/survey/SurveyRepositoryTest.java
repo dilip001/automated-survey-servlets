@@ -41,9 +41,9 @@ public class SurveyRepositoryTest {
         JpaPersistModule testPersistModule = new JpaPersistModule("jpaUnit");
 
         String databaseUrl = System.getenv("TEST_DATABASE_URL");
-        String databasePassword = System.getenv("TEST_DATABASE_PASSWORD");
-        String databaseUser = System.getenv("TEST_DATABASE_USER") == null ?
-                "" : System.getenv("TEST_DATABASE_USER");
+        String databaseUser = System.getenv("TEST_DATABASE_USER");
+        String databasePassword = System.getenv("TEST_DATABASE_PASSWORD") == null ?
+                "" : System.getenv("TEST_DATABASE_PASSWORD");
 
         testPersistModule.properties(new HashMap<String, String>(){{
             put("javax.persistence.jdbc.url", databaseUrl);
