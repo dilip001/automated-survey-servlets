@@ -5,6 +5,6 @@ env:
   global:
   - TEST_DATABASE_URL=automated-survey-servlets-test
   - TEST_DATABASE_USER=postgres
-  - TEST_DATABASE_PASSWORD=postgres
+  - TEST_DATABASE_PASSWORD=
 before_script:
 - psql -c 'create database "automated-survey-servlets-test";' -U postgres
