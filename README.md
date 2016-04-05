@@ -43,7 +43,7 @@ An application example that implements an Automated Survey using Twilio.
 
    This will run the embedded Jetty application server that uses port 8080.
 
-1. Expose the application to the wider Internet using [ngrok](https://ngrok.com/)
+1. Expose the application to the wider Internet using [ngrok](https://ngrok.com/).
 
    ```bash
    $ ngrok http 8080
