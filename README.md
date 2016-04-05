@@ -26,7 +26,7 @@ An application example that implements an Automated Survey using Twilio.
 
 1. Configure Twilio to call your webhooks.
 
-   You will need to configure Twilio to call your application when SMS and calls are received.
+   You will need to configure Twilio to call your application when SMSs and calls are received.
 
    You will need to provision at least one Twilio number with SMS and voice capabilities
    so the application's users can trigger the survey. You can buy a number [right
@@ -45,7 +45,7 @@ An application example that implements an Automated Survey using Twilio.
 
    This will run the embedded Jetty application server that uses port 8080.
 
-1. Expose the application to the wider Internet using [ngrok](https://ngrok.com/)
+1. Expose the application to the wider Internet using [ngrok](https://ngrok.com/).
 
    ```bash
    $ ngrok http 8080
