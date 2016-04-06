@@ -3,6 +3,7 @@ package com.twilio.automatedsurvey.servlets;
 import com.twilio.automatedsurvey.survey.Question;
 import com.twilio.automatedsurvey.survey.Survey;
 import com.twilio.automatedsurvey.survey.SurveyRepository;
+import com.twilio.sdk.verbs.Redirect;
 import com.twilio.sdk.verbs.TwiMLException;
 import com.twilio.sdk.verbs.TwiMLResponse;
 import com.twilio.sdk.verbs.Verb;
@@ -25,8 +26,6 @@ public class SurveyServletTest {
         when(surveyRepo.add(any(Survey.class))).thenReturn(new Survey("test"));
 
         TwilioResponseFactory twilioResponseFactory = mock(TwilioResponseFactory.class);
-        TwiMLResponse twiMLResponse = new TwiMLResponse();
-        when(twilioResponseFactory.build(any(Survey.class),any(Verb.class))).thenReturn(twiMLResponse);
 
         ResponseWriter responseWriter = mock(ResponseWriter.class);
         HttpServletResponse response = mock(HttpServletResponse.class);

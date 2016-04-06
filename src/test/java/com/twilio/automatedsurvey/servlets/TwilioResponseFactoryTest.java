@@ -1,9 +1,7 @@
 package com.twilio.automatedsurvey.servlets;
 
 import com.twilio.automatedsurvey.survey.Survey;
-import com.twilio.sdk.verbs.Say;
-import com.twilio.sdk.verbs.TwiMLException;
-import com.twilio.sdk.verbs.TwiMLResponse;
+import com.twilio.sdk.verbs.*;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.hasItem;
@@ -19,7 +17,14 @@ public class TwilioResponseFactoryTest {
         String expectedWelcomeMessage = String.format("Welcome to the %s survey", survey.getTitle());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
-        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey, new Say(String.format("Welcome to the %s survey", survey.getTitle())));
+        String url = String.format("question?survey=%s", survey.getId());
+        Redirect redirectQuestion = new Redirect(url);
+        redirectQuestion.setMethod("GET");
+        TwiMLResponse twiMLResponse1 = new TwiMLResponse();
+        twiMLResponse1.append(new Say(String.format("Welcome to the %s survey", survey.getTitle())));
+        twiMLResponse1.append(redirectQuestion);
+
+        TwiMLResponse twiMLResponse = twiMLResponse1;
 
         assertThat(twiMLResponse.getChildren(), hasItem(hasProperty("body", is(expectedWelcomeMessage))));
     }
@@ -30,7 +35,14 @@ public class TwilioResponseFactoryTest {
         String expectedUrl = String.format("question?survey=%s", survey.getId());
         TwilioResponseFactory twilioResponseFactory = new TwilioResponseFactory();
 
-        TwiMLResponse twiMLResponse = twilioResponseFactory.build(survey, new Say(String.format("Welcome to the %s survey", survey.getTitle())));
+        String url = String.format("question?survey=%s", survey.getId());
+        Redirect redirectQuestion = new Redirect(url);
+        redirectQuestion.setMethod("GET");
+        TwiMLResponse twiMLResponse1 = new TwiMLResponse();
+        twiMLResponse1.append(new Say(String.format("Welcome to the %s survey", survey.getTitle())));
+        twiMLResponse1.append(redirectQuestion);
+
+        TwiMLResponse twiMLResponse = twiMLResponse1;
 
         assertThat(twiMLResponse.getChildren(), hasItem(hasProperty("body", is(expectedUrl))));
     }
