@@ -28,11 +28,12 @@
 
       ---
       **See Also:**
-      * [Getting Started with Spring Boot](//spring.io/guides/gs/spring-boot/)
       * [Getting started with Twilio Java](//www.twilio.com/docs/java/install)
       * [TwiML: the Twilio Markup Language](//www.twilio.com/docs/api/twiml).
 
-  .step(data-tile='Create a Survey', data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java', data-highlight='46-46, 59-63')
+  .step(data-tile='Create a Survey', 
+    data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java', 
+    data-highlight='44-44, 67-71')
     :markdown
       ## Create a Survey
 
@@ -43,13 +44,14 @@
       create a new survey register.
 
       You can modify the questions from the survey by editing the
-      [survey.json](//github.com/TwilioDevEd/automated-survey-servlet/blob/master/survey.json)
+      [survey.json](//github.com/TwilioDevEd/automated-survey-servlets/blob/master/src/main/resources/survey.json)
       file located in the root of the repository and re-running the app.
 
       We want users to take our survey, so next we will implement
       the handler for SMS and calls.
 
-   .step(data-tile='The Interview Loop', data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java', data-highlight='35-57')
+   .step(data-tile='The Interview Loop', 
+    data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java', data-highlight='33-54')
     :markdown
       ## The Interview Loop
 
@@ -71,7 +73,7 @@
 
   .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
     data-title='Configuring a Twilio Number'
-    data-highlight='35-57')
+    data-highlight='33-54')
     :markdown
       ## Configuring a Twilio Number
 
@@ -87,7 +89,7 @@
 
   .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
     data-title="Responding To A Twilio Request"
-    data-highlight='35-40, 45-53')
+    data-highlight='33-38, 43-54, 56-65')
     :markdown
       ## Responding to a Twilio Request
 
@@ -95,8 +97,8 @@
       the number's configuration.
 
       The endpoint will then process the request. In case that it's not an answer for a previous question
-      the application will use `TwilioResponseFactory` to build and return a welcome message to the user. 
-      For phone users, the built message will contain a `Say` verb with the message or a `Message` Verb for SMS.
+      the application will build and return a welcome message to the user. For phone users, the built 
+      message will contain a `Say` verb with the message or a `Message` Verb for SMS.
 
       It will also include a `Redirect` verb to the question's endpoint to continue with the survey flow.
 
@@ -112,23 +114,29 @@
       * [TwiML SMS: <Redirect>](//www.twilio.com/docs/api/twiml/sms/redirect)
 
   .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/QuestionServlet.java',
-    data-highlight='32-62')
+    data-highlight='29-55')
     :markdown
       ## Question Controller
 
-      This endpoint will just check if it's a SMS or Call, instantiating the proper class to build the correct TwiML response.
+      This endpoint will return the `Question` specified on the request. If no request is specified, It will return the 
+      Survey's first question.
+      
       Each type of question and interaction (Call/SMS) will produce different instructions on how to proceed.
-      For instance, we can record voice or gather a key press during a call, but we can't do the same for text messages.
+      For instance, we can record voice or gather a key press during a call, but we can't do the same for text messages. 
+      
+      `AbstractTwiMLQuestionFactory.getInstance` solves that problem. It will return a different type of factory that will know 
+      how to build responses depending in if it's a SMS or a Call originated request.
 
       When the user is interacting over SMS we don't have something like an ongoing call session with a well defined state.
-      It becomes harder to know if an SMS is answering question 2 or 20, since all requests will be fired to `/survey/sms` main endpoint.
-      To solve that, we can use [Twilio Cookies](//www.twilio.com/blog/2014/07/the-definitive-guide-to-sms-conversation-tracking.html)
-      to keep track of what question is being answered at the moment. That is done by `createSessionForQuestion` method.
+      It becomes harder to know if an SMS is answering question 2 or 20, since all requests will be fired to `/survey` main endpoint.
+      
+      To solve that, we're storing in the HTTP session the ids of Survey and Question that are being returned to be reused on later 
+      SMS requests.
 
       Let's see how the response is built.
 
-  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
-    data-highlight='54-72')
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/TelephoneTwiMLQuestionFactory.java',
+    data-highlight='32-70')
     :markdown
       ## Building Our TwiML Verbs
 
@@ -152,14 +160,15 @@
       * [TwiML Voice: <Gather>](//www.twilio.com/docs/api/twiml/gather)
       * [TwiML Voice: <Record>](//www.twilio.com/docs/api/twiml/record)
 
-  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
-    data-highlight='38-76')
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/survey/Survey.java',
+    data-highlight='61-77')
     :markdown
       ## Handling responses.
 
       After the user has finished speaking and pressing keys, Twilio just sends a request telling what happened and asking for further instructions.
 
-      At this point, we need to recover data from Twilio's request parameters (`ResponseParser` does that) and store them on `persistResponse` method.
+      At the methods `Survey.answerCall` and `Survey.answerSMS` we extract from a Map containing the request parameters
+      the information needed to answer the question for Call and SMS generated requests respectivly.
 
       Recovered parameters vary according to what we asked on the questions, they can be:
       * `Body` contains the text message from answer over SMS.
@@ -167,8 +176,8 @@
       * `RecodingUrl` contains the URL for listening a recorded message.
       * `TranscriptionText` contains the result of a recording transcription.
 
-      Finally we redirect to our Question controller, which will ask the next question on the loop.
-      This is done on `redirectToNextQuestion` method.
+      After answering the question, `SurveyController` redirects to our `QuestionServlet`, which will
+      ask the next question on the loop.
 
       Now, let's see how to visualize the results.
 
@@ -178,22 +187,16 @@
       * [TwiML Voice: Your Response](//www.twilio.com/docs/api/twiml/your_response)
       * [TwiML SMS: Your Response](//www.twilio.com/docs/api/twiml/sms/your_response)
 
-  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
-    data-highlight='31-53')
+  .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/IndexServlet.java',
+    data-highlight='25-30')
     :markdown
       ## Display the survey results
 
       For this route we simply query the database using a JPA query
-      and then display the information within a Mustache template. We
-      display a panel for every question on the last survey, and
-      inside every panel we list the responses from different calls.
-
+      and then display the information within JSP page. We display a list
+      of surveys with their respective question and answers.
+      
       You can access this page in the applications root route `/`.
-
-      ---
-
-      **See Also:**
-      * [Mustache templates](//mustache.github.io/)
 
   .step
     :markdown
@@ -208,10 +211,11 @@
       useful.  If you're a Java developer working with Twilio, you
       might enjoy these other tutorials:
 
-      ### [Appointment Reminders](//www.twilio.com/docs/howto/walkthrough/appointment-reminders/java/spark)
-      Automate the process of reaching out to your customers in advance of an upcoming appointment.
+      ### [SMS and MMS Notifications](//www.twilio.com/docs/tutorials/walkthrough/server-notifications/java/servlets)
+      Never miss another server outage. Learn how to build a server notification system that will alert 
+      all administrators via SMS when a server outage occurs.
 
-      ### [Click to Call](//www.twilio.com/docs/tutorials/walkthrough/click-to-call/java/spring)
+      ### [Click to Call](//www.twilio.com/docs/tutorials/walkthrough/click-to-call/java/servlets)
       Click-to-call enables your company to convert web traffic into phone calls with the click of a button.
 
       ### Did this help?
