@@ -8,7 +8,7 @@
         using Twilio's API and TwiML. In addition to that,
         the application also displays the survey results. The majority of
         the application's routes will be accessed by Twilio itself since survey-takers
-        will interact with the application through the phone voice call and SMS, not
+        will interact with the application through the phone voice call and SMS and not
         through the web.
 
         When the survey is requested by a phonecall, questions in surveys might be voice
@@ -34,7 +34,7 @@
     :markdown
       ## Configuring the application
 
-      The application requirements are minimal. The only necessary
+      The application's requirements are minimal. The only necessary
       component is a running PostgreSQL database. Copy the sample configuration file `.env.example`
       and edit it to match your configuration. Once you have edited the `.env.example` file,
       if you are using a unix operating system, just use the source command to load the variables into your environment.
@@ -55,7 +55,7 @@
     :markdown
       ## Creating a survey
 
-      In order to perform automated surveys we first need to have some questions to ask. For your convenience,
+      In order to perform an automated survey we first need to have questions on it. For your convenience,
       the application's repository already includes one survey that will be loaded into the database. If the database
       is configured correctly every time that a user requests a survey, the application will create a new one
       for that user.
@@ -79,8 +79,8 @@
       or POST).
 
       For this application Twilio should be configured to make a GET request to
-      the application's `/survey` endpoint. Here the application will create and return a new survey,
-      and after stating its name and welcoming the user to it using TwiML's
+      the application's `/survey` endpoint. The application will create and return a new survey.
+      After stating its name and welcoming the user to it using TwiML's
       [`<Say>`](https://www.twilio.com/docs/api/twiml/say) verb, it will redirect the call
       to the first question using the [`<Redirect>`](https://www.twilio.com/docs/api/twiml/redirect).
       verb.
@@ -100,13 +100,13 @@
   .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/QuestionServlet.java',
     data-highlight='29-59')
     :markdown
-      ## Ask the caller a question
+      ## Asking the caller a question
 
       At this point the Twilio client has made a request for the first
       question. We will use the
       [twilio-java](https://github.com/twilio/twilio-java) library to
-      generate a response. First we will ask a question, then say
-      instructions on how to answer that question and finally
+      generate a response. First we will ask a question, then we will provide
+      instructions on how to answer that question and finally we will
       record the caller's answer to the question. It's important to
       keep in mind that instructions on how to answer a question depend on the
       type of question we ask. We also need to record the answer
@@ -143,7 +143,7 @@
   .step(data-file='src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java',
     data-highlight='33-91')
     :markdown
-      ## Storing a question's answer
+      ## Storing an answer
 
       Now Twilio has made a POST request to the
       `/survey?survey=<survey_id>&question=<question_id>` URL.  The request includes
@@ -178,7 +178,7 @@
 
       For this route we simply query the database using a JPA query
       and then display a list of all the surveys taken and its questions
-      with the respective answers.
+      and answers.
 
       You can access this page in the applications root route `/`.
 
@@ -198,7 +198,7 @@
       ### [Appointment Reminders](https://www.twilio.com/docs/howto/walkthrough/appointment-reminders/java/spark)
       Automate the process of reaching out to your customers in advance of an upcoming appointment.
 
-      ### [How-Tos and Example Code](https://www.twilio.com/docs/howto)
+      ### [How-To and Example Code](https://www.twilio.com/docs/howto)
       Tutorials in different programming languages
 
       ### Did this help?
