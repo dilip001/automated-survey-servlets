@@ -165,10 +165,11 @@
     :markdown
       ## Handling responses.
 
-      After the user has finished speaking and pressing keys, Twilio just sends a request telling what happened and asking for further instructions.
+      After the user has finished speaking and pressing keys, Twilio just sends a request telling what
+      happened and asking for further instructions.
 
-      We extract the methods `Survey.answerCall` and `Survey.answerSMS` from a Map containing the request parameters.
-      That is the information needed respectively to answer the question in case it is a Call or an SMS generated requests.
+      On `Survey.answerCall` and `Survey.answerSMS` we extract from a Map containing the request parameters the 
+      information needed to answer the question. 
 
       Recovered parameters vary according to what we asked on the questions, they can be:
 
