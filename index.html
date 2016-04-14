@@ -37,12 +37,12 @@ the user to the next question or finish the survey.</p>
 <li><a href="//www.twilio.com/docs/java/install">Getting started with Twilio Java</a></li>
 <li><a href="//www.twilio.com/docs/api/twiml">TwiML: the Twilio Markup Language</a>.</li>
 </ul>
-</div><div data-tile="Create a Survey" data-file="src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java" data-highlight="44-44, 67-71" class="step"><h2 id="create-a-survey">Create a Survey</h2>
-<p>In order to perform automated surveys we first need to have some
-questions to ask. For your convenience, the application&#39;s
-repository already includes one survey. If the database is configured correctly 
+</div><div data-tile="Create a Survey" data-file="src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java" data-highlight="44-44, 67-71" class="step"><h2 id="creating-a-survey">Creating a Survey</h2>
+<p>In order to perform automated surveys we first need to set up the
+questions. For your convenience, the application&#39;s
+repository already includes one survey. If the database is configured correctly
 every time that the app receives a request for a survey, it will
-create a new survey register.</p>
+create a new survey registration.</p>
 <p>You can modify the questions from the survey by editing the
 <a href="//github.com/TwilioDevEd/automated-survey-servlets/blob/master/src/main/resources/survey.json">survey.json</a>
 file located in the root of the repository and re-running the app.</p>
@@ -52,11 +52,11 @@ the handler for SMS and calls.</p>
 <p>It is helpful to visualize your interaction with a user during a survey as a loop.
 The chart below shows how that interaction will be handled. (click to enlarge):</p>
 <p><img src="//s3.amazonaws.com/howtodocs/flowchart.png" alt="Survey Flow Chart"></p>
-<p>The user can answer question for your survey over the phone using either their phone&#39;s keypad or by speaking.
+<p>The user can answer your survey&#39;s questions over the phone using either their phone&#39;s keypad or by voice input.
 After each interaction, Twilio will make an HTTP request to your web application with either the string of
 keys the user pressed or a URL to a recording of their voice input.</p>
 <p>For SMS surveys the user will answer questions just by replying
-with another SMS to your Twilio number where we got the question from. </p>
+with another SMS to your Twilio number where we got the question from.</p>
 <p>It&#39;s up to the application to process, store and respond to the user&#39;s input.</p>
 <p>Let&#39;s dive into this flow to see how it actually works.</p>
 </div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java" data-title="Configuring a Twilio Number" data-highlight="33-54" class="step"><h2 id="configuring-a-twilio-number">Configuring a Twilio Number</h2>
@@ -66,10 +66,10 @@ to send our web application an HTTP request when we get an incoming call or text
 <code>/survey</code> using HTTP GET.</p>
 <p><img src="//s3.amazonaws.com/howtodocs/number-config.png" alt="Configuring a Twilio Number"></p>
 </div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/SurveyServlet.java" data-title="Responding To A Twilio Request" data-highlight="33-38, 43-54, 56-65" class="step"><h2 id="responding-to-a-twilio-request">Responding to a Twilio Request</h2>
-<p>Right after receiving a call or an SMS, Twilio will send a request to the URL specified on 
+<p>Right after receiving a call or an SMS, Twilio will send a request to the URL specified on
 the number&#39;s configuration.</p>
-<p>The endpoint will then process the request. In case that it&#39;s not an answer for a previous question
-the application will build and return a welcome message to the user. For phone users, the built 
+<p>The endpoint will then process the request. In case the request is not an answer from a previous question
+the application will build and return a welcome message to the user. For phone users, the built
 message will contain a <code>Say</code> verb with the message or a <code>Message</code> Verb for SMS.</p>
 <p>It will also include a <code>Redirect</code> verb to the question&#39;s endpoint to continue with the survey flow.</p>
 <hr>
@@ -84,15 +84,15 @@ message will contain a <code>Say</code> verb with the message or a <code>Message
 <li><a href="//www.twilio.com/docs/api/twiml/sms/redirect">TwiML SMS: &lt;Redirect&gt;</a></li>
 </ul>
 </div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/QuestionServlet.java" data-highlight="29-55" class="step"><h2 id="question-controller">Question Controller</h2>
-<p>This endpoint will return the <code>Question</code> specified on the request. If no request is specified, It will return the 
+<p>This endpoint will return the <code>Question</code> specified on the request. If no request is specified, It will return the
 Survey&#39;s first question.</p>
 <p>Each type of question and interaction (Call/SMS) will produce different instructions on how to proceed.
-For instance, we can record voice or gather a key press during a call, but we can&#39;t do the same for text messages. </p>
-<p><code>AbstractTwiMLQuestionFactory.getInstance</code> solves that problem. It will return a different type of factory that will know 
-how to build responses depending in if it&#39;s a SMS or a Call originated request.</p>
+For instance we can record voice or gather a key press during a call, but we can&#39;t do the same for text messages.</p>
+<p><code>AbstractTwiMLQuestionFactory.getInstance</code> solves that problem. It will return a different type of factory that will know
+how to build responses depending on wether it&#39;s a SMS or a Call originated request.</p>
 <p>When the user is interacting over SMS we don&#39;t have something like an ongoing call session with a well defined state.
 It becomes harder to know if an SMS is answering question 2 or 20, since all requests will be fired to <code>/survey</code> main endpoint.</p>
-<p>To solve that, we&#39;re storing in the HTTP session the ids of Survey and Question that are being returned to be reused on later 
+<p>To solve that, we&#39;re storing in the HTTP session the ids of Survey and Question that are being returned to be reused on later
 SMS requests.</p>
 <p>Let&#39;s see how the response is built.</p>
 </div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/TelephoneTwiMLQuestionFactory.java" data-highlight="32-70" class="step"><h2 id="building-our-twiml-verbs">Building Our TwiML Verbs</h2>
@@ -114,16 +114,16 @@ Twilio will process the record and extract useful text, making a request to our 
 </ul>
 </div><div data-file="src/main/java/com/twilio/automatedsurvey/survey/Survey.java" data-highlight="61-77" class="step"><h2 id="handling-responses-">Handling responses.</h2>
 <p>After the user has finished speaking and pressing keys, Twilio just sends a request telling what happened and asking for further instructions.</p>
-<p>At the methods <code>Survey.answerCall</code> and <code>Survey.answerSMS</code> we extract from a Map containing the request parameters
-the information needed to answer the question for Call and SMS generated requests respectivly.</p>
+<p>We extract the methods <code>Survey.answerCall</code> and <code>Survey.answerSMS</code> from a Map containing the request parameters.
+That is the information needed respectively to answer the question in case it is a Call or an SMS generated requests.</p>
 <p>Recovered parameters vary according to what we asked on the questions, they can be:</p>
 <ul>
 <li><code>Body</code> contains the text message from answer over SMS.</li>
 <li><code>Digits</code> contains the keys pressed for a numeric question.</li>
-<li><code>RecodingUrl</code> contains the URL for listening a recorded message.</li>
-<li><code>TranscriptionText</code> contains the result of a recording transcription.</li>
+<li><code>RecordingUrl</code> contains the URL for listening a recorded message.</li>
+<li><code>TranscriptionText</code> contains the result of a recording&#39;s transcription.</li>
 </ul>
-<p>After answering the question, <code>SurveyController</code> redirects to our <code>QuestionServlet</code>, which will
+<p>After answering a question, the <code>SurveyController</code> redirects to our <code>QuestionServlet</code>, which will
 ask the next question on the loop.</p>
 <p>Now, let&#39;s see how to visualize the results.</p>
 <hr>
@@ -132,10 +132,10 @@ ask the next question on the loop.</p>
 <li><a href="//www.twilio.com/docs/api/twiml/your_response">TwiML Voice: Your Response</a></li>
 <li><a href="//www.twilio.com/docs/api/twiml/sms/your_response">TwiML SMS: Your Response</a></li>
 </ul>
-</div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/IndexServlet.java" data-highlight="25-30" class="step"><h2 id="display-the-survey-results">Display the survey results</h2>
+</div><div data-file="src/main/java/com/twilio/automatedsurvey/servlets/IndexServlet.java" data-highlight="25-30" class="step"><h2 id="displaying-the-survey-s-results">Displaying the Survey&#39;s Results</h2>
 <p>For this route we simply query the database using a JPA query
 and then display the information within JSP page. We display a list
-of surveys with their respective question and answers.</p>
+of surveys with their respective questions and answers.</p>
 <p>You can access this page in the applications root route <code>/</code>.</p>
 </div><div class="step"><h2 id="where-to-next-">Where to next?</h2>
 <p>That&#39;s it!</p>
@@ -146,7 +146,7 @@ the application. We hope you found this sample application
 useful.  If you&#39;re a Java developer working with Twilio, you
 might enjoy these other tutorials:</p>
 <h3 id="-sms-and-mms-notifications-www-twilio-com-docs-tutorials-walkthrough-server-notifications-java-servlets-"><a href="//www.twilio.com/docs/tutorials/walkthrough/server-notifications/java/servlets">SMS and MMS Notifications</a></h3>
-<p>Never miss another server outage. Learn how to build a server notification system that will alert 
+<p>Never miss another server outage. Learn how to build a server notification system that will alert
 all administrators via SMS when a server outage occurs.</p>
 <h3 id="-click-to-call-www-twilio-com-docs-tutorials-walkthrough-click-to-call-java-servlets-"><a href="//www.twilio.com/docs/tutorials/walkthrough/click-to-call/java/servlets">Click to Call</a></h3>
 <p>Click-to-call enables your company to convert web traffic into phone calls with the click of a button.</p>
