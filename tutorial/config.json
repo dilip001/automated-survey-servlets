@@ -1,6 +1,6 @@
 {
     "title": "Automated Surveys using Servlets",
-    "repo": "TwilioDevEd/automated-survey-servlet",
+    "repo": "TwilioDevEd/automated-survey-servlets",
     "description": "Learn to implement automated surveys in your Servlet web app with Twilio.",
     "heroku": false
 }
